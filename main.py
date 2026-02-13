@@ -1,544 +1,878 @@
-from fastmcp import FastMCP
-import psutil
-import platform
-import socket
-import datetime
+from __future__ import annotations
+
+import json
+import os
 import time
 import uuid
-import json
-import subprocess
-from typing import Any, Dict, List, Optional, Tuple
+import threading
+from dataclasses import dataclass, asdict
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Literal, Tuple
+
+import psutil
+from fastmcp import FastMCP
+
+# ============================================================
+# MCP Server
+# ============================================================
+
+mcp = FastMCP("AI System Recorder MCP Server")
+
+# ============================================================
+# Types (Azure Foundry / Strict Schema Friendly)
+# ============================================================
+
+ISO8601 = str
+RecordingProfile = Literal["basic", "security", "full"]
+RecordingMode = Literal["foreground", "background"]
+ExportFormat = Literal["json", "csv", "html"]
 
 
-mcp = FastMCP("NetProbe MCP - Fan Spike Watch (Windows + Event Logs)")
+@dataclass
+class ToolMeta:
+    tool: str
+    success: bool
+    timestamp_utc: ISO8601
+    message: str
 
 
-# -----------------------------
-# In-memory session storage
-# -----------------------------
-LAST_WATCH_SESSION: Optional[Dict[str, Any]] = None
+@dataclass
+class ErrorInfo:
+    error_type: str
+    error_message: str
 
 
-# -----------------------------
-# Helpers
-# -----------------------------
-def utc_now() -> str:
-    return datetime.datetime.utcnow().isoformat(timespec="seconds") + "Z"
+@dataclass
+class NetworkSummary:
+    bytes_sent: int
+    bytes_recv: int
+    packets_sent: int
+    packets_recv: int
+    errin: int
+    errout: int
+    dropin: int
+    dropout: int
 
 
-def utc_dt_now() -> datetime.datetime:
-    return datetime.datetime.utcnow()
+@dataclass
+class ProcessInfo:
+    pid: int
+    name: Optional[str]
+    exe: Optional[str]
+    username: Optional[str]
+    status: Optional[str]
+    create_time_utc: Optional[ISO8601]
+    cpu_percent: Optional[float]
+    memory_rss: Optional[int]
+    memory_vms: Optional[int]
+    ppid: Optional[int]
+    cmdline: Optional[List[str]]
 
 
-def get_local_ip() -> str:
+@dataclass
+class ConnectionInfo:
+    pid: Optional[int]
+    process_name: Optional[str]
+    exe: Optional[str]
+    username: Optional[str]
+    status: str
+    local_ip: Optional[str]
+    local_port: Optional[int]
+    remote_ip: Optional[str]
+    remote_port: Optional[int]
+
+
+@dataclass
+class ListeningPortInfo:
+    pid: Optional[int]
+    process_name: Optional[str]
+    exe: Optional[str]
+    username: Optional[str]
+    local_ip: Optional[str]
+    local_port: Optional[int]
+
+
+@dataclass
+class SystemSnapshot:
+    snapshot_id: str
+    timestamp_utc: ISO8601
+    profile: RecordingProfile
+
+    cpu_percent: Optional[float]
+    ram_percent: Optional[float]
+    ram_used: Optional[int]
+    ram_total: Optional[int]
+
+    network: Optional[NetworkSummary]
+
+    top_processes: Optional[List[ProcessInfo]]
+    active_connections: Optional[List[ConnectionInfo]]
+    listening_ports: Optional[List[ListeningPortInfo]]
+
+    alerts: List[str]
+
+
+@dataclass
+class RecordingSessionInfo:
+    session_id: str
+    started_utc: ISO8601
+    stopped_utc: Optional[ISO8601]
+    is_running: bool
+    profile: RecordingProfile
+    interval_seconds: int
+    mode: RecordingMode
+    output_dir: str
+    snapshot_count: int
+
+
+# ============================================================
+# Helpers (Safe + Robust)
+# ============================================================
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "recordings"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+_sessions_lock = threading.Lock()
+_sessions: Dict[str, "RecorderSession"] = {}
+
+
+def utc_now_iso() -> ISO8601:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def safe_str(x: Any) -> Optional[str]:
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        ip = s.getsockname()[0]
-        s.close()
-        return ip
+        return str(x) if x is not None else None
     except Exception:
-        return "unknown"
+        return None
 
 
-def run_powershell(cmd: str, timeout_sec: int = 10) -> str:
-    """
-    Safe wrapper for reading system info via PowerShell.
-    """
+def safe_psutil_call(fn, default):
     try:
-        completed = subprocess.run(
-            ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", cmd],
-            capture_output=True,
-            text=True,
-            timeout=timeout_sec
+        return fn()
+    except Exception:
+        return default
+
+
+def safe_process_info(pid: Optional[int]) -> ProcessInfo:
+    """
+    Safe process fetch.
+    Never crashes the server.
+    """
+    if pid is None:
+        return ProcessInfo(
+            pid=-1,
+            name=None,
+            exe=None,
+            username=None,
+            status=None,
+            create_time_utc=None,
+            cpu_percent=None,
+            memory_rss=None,
+            memory_vms=None,
+            ppid=None,
+            cmdline=None,
         )
-        return (completed.stdout or "").strip()
-    except Exception:
-        return ""
 
-
-def get_basic_machine_info() -> Dict[str, Any]:
-    return {
-        "hostname": platform.node(),
-        "os": platform.platform(),
-        "local_ip": get_local_ip(),
-        "boot_time_utc": datetime.datetime.utcfromtimestamp(psutil.boot_time()).isoformat(timespec="seconds") + "Z"
-    }
-
-
-def safe_process_info(limit: int = 12) -> List[Dict[str, Any]]:
-    procs = []
-    for p in psutil.process_iter(attrs=["pid", "name", "username"]):
-        try:
-            mem = p.memory_info().rss
-            cpu = p.cpu_percent(interval=0.0)
-            procs.append({
-                "pid": p.info["pid"],
-                "name": p.info["name"],
-                "username": p.info.get("username"),
-                "cpu_percent": cpu,
-                "memory_rss_bytes": mem,
-            })
-        except Exception:
-            continue
-
-    procs = sorted(procs, key=lambda x: (x["cpu_percent"], x["memory_rss_bytes"]), reverse=True)
-    return procs[:limit]
-
-
-def get_system_snapshot() -> Dict[str, Any]:
-    cpu = psutil.cpu_percent(interval=0.25)
-    ram = psutil.virtual_memory()
-    disk = psutil.disk_usage("C://")
-
-    return {
-        "timestamp_utc": utc_now(),
-        "machine": get_basic_machine_info(),
-        "cpu": {"percent": cpu},
-        "ram": {
-            "percent": ram.percent,
-            "used_bytes": ram.used,
-            "available_bytes": ram.available,
-            "total_bytes": ram.total,
-        },
-        "disk_c": {
-            "percent": disk.percent,
-            "used_bytes": disk.used,
-            "free_bytes": disk.free,
-            "total_bytes": disk.total,
-        }
-    }
-
-
-def get_network_summary() -> Dict[str, Any]:
-    io = psutil.net_io_counters(pernic=True)
-    interfaces = {}
-
-    for nic, c in io.items():
-        interfaces[nic] = {
-            "bytes_sent": c.bytes_sent,
-            "bytes_recv": c.bytes_recv,
-            "packets_sent": c.packets_sent,
-            "packets_recv": c.packets_recv,
-            "errin": c.errin,
-            "errout": c.errout,
-            "dropin": c.dropin,
-            "dropout": c.dropout,
-        }
-
-    conns = []
     try:
-        for c in psutil.net_connections(kind="inet")[:60]:
-            laddr = f"{c.laddr.ip}:{c.laddr.port}" if c.laddr else None
-            raddr = f"{c.raddr.ip}:{c.raddr.port}" if c.raddr else None
-            conns.append({
-                "pid": c.pid,
-                "status": c.status,
-                "local": laddr,
-                "remote": raddr,
-            })
-    except Exception as e:
-        conns = [{"error": str(e)}]
+        p = psutil.Process(pid)
 
-    return {
-        "interfaces": interfaces,
-        "connections_sample": conns
-    }
+        with p.oneshot():
+            name = safe_psutil_call(p.name, None)
+            exe = safe_psutil_call(p.exe, None)
+            username = safe_psutil_call(p.username, None)
+            status = safe_psutil_call(p.status, None)
+
+            create_time = safe_psutil_call(p.create_time, None)
+            create_time_utc = (
+                datetime.fromtimestamp(create_time, tz=timezone.utc).isoformat()
+                if isinstance(create_time, (int, float))
+                else None
+            )
+
+            cpu_percent = safe_psutil_call(p.cpu_percent, None)
+            mem = safe_psutil_call(p.memory_info, None)
+
+            memory_rss = getattr(mem, "rss", None) if mem else None
+            memory_vms = getattr(mem, "vms", None) if mem else None
+
+            ppid = safe_psutil_call(p.ppid, None)
+            cmdline = safe_psutil_call(p.cmdline, None)
+
+        return ProcessInfo(
+            pid=pid,
+            name=name,
+            exe=exe,
+            username=username,
+            status=safe_str(status),
+            create_time_utc=create_time_utc,
+            cpu_percent=float(cpu_percent) if cpu_percent is not None else None,
+            memory_rss=int(memory_rss) if memory_rss is not None else None,
+            memory_vms=int(memory_vms) if memory_vms is not None else None,
+            ppid=int(ppid) if ppid is not None else None,
+            cmdline=list(cmdline) if isinstance(cmdline, list) else None,
+        )
+
+    except (psutil.NoSuchProcess, psutil.AccessDenied):
+        return ProcessInfo(
+            pid=pid,
+            name=None,
+            exe=None,
+            username=None,
+            status=None,
+            create_time_utc=None,
+            cpu_percent=None,
+            memory_rss=None,
+            memory_vms=None,
+            ppid=None,
+            cmdline=None,
+        )
+    except Exception:
+        return ProcessInfo(
+            pid=pid,
+            name=None,
+            exe=None,
+            username=None,
+            status=None,
+            create_time_utc=None,
+            cpu_percent=None,
+            memory_rss=None,
+            memory_vms=None,
+            ppid=None,
+            cmdline=None,
+        )
 
 
-def get_gpu_snapshot_windows() -> Dict[str, Any]:
+def safe_net_connections(kind: str = "inet") -> List[Any]:
     """
-    Best-effort GPU telemetry via Windows perf counters.
+    psutil.net_connections is the #1 crash point.
+    This wrapper prevents the server from dying.
     """
-    ps_cmd = r"""
-    $counters = Get-Counter '\GPU Engine(*)\Utilization Percentage' -ErrorAction SilentlyContinue
-    if ($counters -and $counters.CounterSamples) {
-      $top = $counters.CounterSamples |
-        Sort-Object CookedValue -Descending |
-        Select-Object -First 10 |
-        ForEach-Object { "$($_.InstanceName)=$([math]::Round($_.CookedValue,2))" }
-      $top -join "`n"
-    }
+    try:
+        return psutil.net_connections(kind=kind)
+    except psutil.AccessDenied:
+        return []
+    except Exception:
+        return []
+
+
+def safe_net_io() -> Optional[NetworkSummary]:
+    try:
+        stats = psutil.net_io_counters()
+        return NetworkSummary(
+            bytes_sent=int(stats.bytes_sent),
+            bytes_recv=int(stats.bytes_recv),
+            packets_sent=int(stats.packets_sent),
+            packets_recv=int(stats.packets_recv),
+            errin=int(stats.errin),
+            errout=int(stats.errout),
+            dropin=int(stats.dropin),
+            dropout=int(stats.dropout),
+        )
+    except Exception:
+        return None
+
+
+def safe_memory() -> Tuple[Optional[float], Optional[int], Optional[int]]:
+    try:
+        vm = psutil.virtual_memory()
+        return float(vm.percent), int(vm.used), int(vm.total)
+    except Exception:
+        return None, None, None
+
+
+def safe_cpu_percent() -> Optional[float]:
+    try:
+        return float(psutil.cpu_percent(interval=0.2))
+    except Exception:
+        return None
+
+
+def detect_basic_alerts(snapshot: SystemSnapshot) -> List[str]:
     """
-    out = run_powershell(ps_cmd, timeout_sec=8)
-
-    if not out:
-        return {"available": False, "note": "GPU perf counters not available on this system."}
-
-    lines = [x.strip() for x in out.splitlines() if x.strip()]
-    return {
-        "available": True,
-        "top_gpu_engines": lines
-    }
-
-
-# -----------------------------
-# Windows Event Logs (Sampling)
-# -----------------------------
-def _win_event_query(log_name: str, minutes: int, max_events: int) -> str:
+    Very safe lightweight alert engine.
+    No "malware detection" claims. Just anomaly indicators.
     """
-    Returns a PowerShell script that fetches last N minutes of events.
-    We keep fields small so it stays fast.
-    """
-    return rf"""
-    $start=(Get-Date).AddMinutes(-{minutes})
-    Get-WinEvent -FilterHashtable @{{LogName='{log_name}'; StartTime=$start}} -ErrorAction SilentlyContinue |
-      Select-Object -First {max_events} |
-      ForEach-Object {{
-        [PSCustomObject]@{{
-          TimeCreated = $_.TimeCreated.ToUniversalTime().ToString("o")
-          Id = $_.Id
-          LevelDisplayName = $_.LevelDisplayName
-          ProviderName = $_.ProviderName
-          Message = ($_.Message -replace "\r"," " -replace "\n"," ") 
-        }}
-      }} | ConvertTo-Json -Depth 4
-    """
+    alerts: List[str] = []
+
+    if snapshot.cpu_percent is not None and snapshot.cpu_percent >= 85:
+        alerts.append(f"High CPU usage detected: {snapshot.cpu_percent:.2f}%")
+
+    if snapshot.ram_percent is not None and snapshot.ram_percent >= 90:
+        alerts.append(f"High RAM usage detected: {snapshot.ram_percent:.2f}%")
+
+    # Port 0.0.0.0 warnings
+    if snapshot.listening_ports:
+        for p in snapshot.listening_ports:
+            if p.local_ip in ("0.0.0.0", "::"):
+                alerts.append(
+                    f"Port exposed on all interfaces: {p.local_ip}:{p.local_port} (PID={p.pid}, Process={p.process_name})"
+                )
+
+    return alerts
 
 
-def get_recent_event_logs(minutes: int = 3, max_events_per_log: int = 12) -> Dict[str, Any]:
-    """
-    Collects a small batch of event logs from multiple sources.
-    """
-    minutes = max(1, min(minutes, 30))
-    max_events_per_log = max(3, min(max_events_per_log, 50))
+# ============================================================
+# Snapshot Generator
+# ============================================================
 
-    logs = {
-        "System": [],
-        "Application": [],
-        "Security": [],
-        # Defender Operational log
-        "Defender": [],
-        # Windows Update client operational log
-        "WindowsUpdate": [],
-    }
+def build_snapshot(profile: RecordingProfile, limit: int = 30) -> SystemSnapshot:
+    snapshot_id = str(uuid.uuid4())
+    timestamp = utc_now_iso()
 
-    # Standard logs
-    for log_name in ["System", "Application", "Security"]:
-        out = run_powershell(_win_event_query(log_name, minutes, max_events_per_log), timeout_sec=12)
-        if out:
-            try:
-                logs[log_name] = json.loads(out)
-            except Exception:
-                logs[log_name] = [{"raw": out[:2000]}]
+    cpu = safe_cpu_percent()
+    ram_percent, ram_used, ram_total = safe_memory()
+    net = safe_net_io()
 
-    # Defender log
-    defender_cmd = rf"""
-    $start=(Get-Date).AddMinutes(-{minutes})
-    Get-WinEvent -FilterHashtable @{{LogName='Microsoft-Windows-Windows Defender/Operational'; StartTime=$start}} -ErrorAction SilentlyContinue |
-      Select-Object -First {max_events_per_log} |
-      ForEach-Object {{
-        [PSCustomObject]@{{
-          TimeCreated = $_.TimeCreated.ToUniversalTime().ToString("o")
-          Id = $_.Id
-          LevelDisplayName = $_.LevelDisplayName
-          ProviderName = $_.ProviderName
-          Message = ($_.Message -replace "\r"," " -replace "\n"," ")
-        }}
-      }} | ConvertTo-Json -Depth 4
-    """
-    out = run_powershell(defender_cmd, timeout_sec=12)
-    if out:
+    top_processes: Optional[List[ProcessInfo]] = None
+    active_connections: Optional[List[ConnectionInfo]] = None
+    listening_ports: Optional[List[ListeningPortInfo]] = None
+
+    # BASIC profile only captures system stats
+    if profile in ("security", "full"):
+        # Processes
+        procs: List[ProcessInfo] = []
         try:
-            logs["Defender"] = json.loads(out)
-        except Exception:
-            logs["Defender"] = [{"raw": out[:2000]}]
-
-    # Windows Update log
-    wu_cmd = rf"""
-    $start=(Get-Date).AddMinutes(-{minutes})
-    Get-WinEvent -FilterHashtable @{{LogName='Microsoft-Windows-WindowsUpdateClient/Operational'; StartTime=$start}} -ErrorAction SilentlyContinue |
-      Select-Object -First {max_events_per_log} |
-      ForEach-Object {{
-        [PSCustomObject]@{{
-          TimeCreated = $_.TimeCreated.ToUniversalTime().ToString("o")
-          Id = $_.Id
-          LevelDisplayName = $_.LevelDisplayName
-          ProviderName = $_.ProviderName
-          Message = ($_.Message -replace "\r"," " -replace "\n"," ")
-        }}
-      }} | ConvertTo-Json -Depth 4
-    """
-    out = run_powershell(wu_cmd, timeout_sec=12)
-    if out:
-        try:
-            logs["WindowsUpdate"] = json.loads(out)
-        except Exception:
-            logs["WindowsUpdate"] = [{"raw": out[:2000]}]
-
-    return logs
-
-
-# -----------------------------
-# Correlation Engine
-# -----------------------------
-FAN_SPIKE_EVENT_KEYWORDS = [
-    # Defender / scanning
-    "scan",
-    "Windows Defender",
-    "MpCmdRun",
-    "antimalware",
-    "threat",
-    # Updates
-    "Windows Update",
-    "install",
-    "servicing",
-    "cumulative update",
-    "download",
-    # GPU / driver
-    "display driver",
-    "nvlddmkm",
-    "graphics",
-    "GPU",
-    # System load
-    "thermal",
-    "power",
-    "ACPI",
-    "Kernel-Power",
-    "WMI",
-]
-
-
-def extract_relevant_events(event_logs: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """
-    Filters event logs down to a small list that likely correlates with fan spikes.
-    """
-    relevant: List[Dict[str, Any]] = []
-
-    def norm(x: str) -> str:
-        return (x or "").lower()
-
-    for log_name, events in event_logs.items():
-        if not isinstance(events, list):
-            continue
-
-        for e in events:
-            msg = norm(str(e.get("Message", "")))
-            provider = norm(str(e.get("ProviderName", "")))
-            lvl = norm(str(e.get("LevelDisplayName", "")))
-
-            hit = False
-            for kw in FAN_SPIKE_EVENT_KEYWORDS:
-                if kw.lower() in msg or kw.lower() in provider:
-                    hit = True
+            for p in psutil.process_iter(attrs=[]):
+                if len(procs) >= max(1, limit):
                     break
+                procs.append(safe_process_info(p.pid))
+        except Exception:
+            pass
+        top_processes = procs
 
-            # Always keep critical errors
-            if "critical" in lvl or "error" in lvl:
-                hit = True
+        # Connections
+        conns = safe_net_connections(kind="inet")
+        conn_results: List[ConnectionInfo] = []
 
-            if hit:
-                relevant.append({
-                    "log": log_name,
-                    "time_utc": e.get("TimeCreated"),
-                    "id": e.get("Id"),
-                    "level": e.get("LevelDisplayName"),
-                    "provider": e.get("ProviderName"),
-                    "message": (e.get("Message") or "")[:300]
-                })
+        for c in conns[: max(1, limit)]:
+            proc = safe_process_info(c.pid)
 
-    return relevant[:25]
+            local_ip = getattr(getattr(c, "laddr", None), "ip", None)
+            local_port = getattr(getattr(c, "laddr", None), "port", None)
+
+            remote_ip = getattr(getattr(c, "raddr", None), "ip", None)
+            remote_port = getattr(getattr(c, "raddr", None), "port", None)
+
+            conn_results.append(
+                ConnectionInfo(
+                    pid=proc.pid if proc.pid != -1 else None,
+                    process_name=proc.name,
+                    exe=proc.exe,
+                    username=proc.username,
+                    status=safe_str(getattr(c, "status", "UNKNOWN")) or "UNKNOWN",
+                    local_ip=safe_str(local_ip),
+                    local_port=int(local_port) if isinstance(local_port, int) else None,
+                    remote_ip=safe_str(remote_ip),
+                    remote_port=int(remote_port) if isinstance(remote_port, int) else None,
+                )
+            )
+
+        active_connections = conn_results
+
+        # Listening ports
+        listening: List[ListeningPortInfo] = []
+        for c in conns:
+            try:
+                if safe_str(getattr(c, "status", "")).upper() == "LISTEN":
+                    proc = safe_process_info(c.pid)
+
+                    local_ip = getattr(getattr(c, "laddr", None), "ip", None)
+                    local_port = getattr(getattr(c, "laddr", None), "port", None)
+
+                    listening.append(
+                        ListeningPortInfo(
+                            pid=proc.pid if proc.pid != -1 else None,
+                            process_name=proc.name,
+                            exe=proc.exe,
+                            username=proc.username,
+                            local_ip=safe_str(local_ip),
+                            local_port=int(local_port) if isinstance(local_port, int) else None,
+                        )
+                    )
+                    if len(listening) >= max(1, limit):
+                        break
+            except Exception:
+                continue
+
+        listening_ports = listening
+
+    snapshot = SystemSnapshot(
+        snapshot_id=snapshot_id,
+        timestamp_utc=timestamp,
+        profile=profile,
+        cpu_percent=cpu,
+        ram_percent=ram_percent,
+        ram_used=ram_used,
+        ram_total=ram_total,
+        network=net,
+        top_processes=top_processes,
+        active_connections=active_connections,
+        listening_ports=listening_ports,
+        alerts=[],
+    )
+
+    snapshot.alerts = detect_basic_alerts(snapshot)
+    return snapshot
 
 
-def compute_network_peak_delta(samples: List[Dict[str, Any]]) -> int:
-    deltas = []
-    for i in range(1, len(samples)):
-        prev = samples[i - 1]["network"]["interfaces"]
-        cur = samples[i]["network"]["interfaces"]
-        total_prev = sum(v["bytes_recv"] + v["bytes_sent"] for v in prev.values())
-        total_cur = sum(v["bytes_recv"] + v["bytes_sent"] for v in cur.values())
-        deltas.append(total_cur - total_prev)
-    return max(deltas) if deltas else 0
+# ============================================================
+# Recording Engine
+# ============================================================
+
+class RecorderSession:
+    def __init__(
+        self,
+        session_id: str,
+        profile: RecordingProfile,
+        interval_seconds: int,
+        mode: RecordingMode,
+        output_dir: Path,
+    ) -> None:
+        self.session_id = session_id
+        self.profile = profile
+        self.interval_seconds = max(1, int(interval_seconds))
+        self.mode = mode
+        self.output_dir = output_dir
+
+        self.started_utc: ISO8601 = utc_now_iso()
+        self.stopped_utc: Optional[ISO8601] = None
+        self.is_running: bool = False
+
+        self.snapshot_count: int = 0
+        self._thread: Optional[threading.Thread] = None
+        self._stop_event = threading.Event()
+
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+    def start(self) -> None:
+        if self.is_running:
+            return
+        self.is_running = True
+        self._stop_event.clear()
+        self._thread = threading.Thread(target=self._run_loop, daemon=True)
+        self._thread.start()
+
+    def stop(self) -> None:
+        if not self.is_running:
+            return
+        self._stop_event.set()
+        self.is_running = False
+        self.stopped_utc = utc_now_iso()
+
+    def _run_loop(self) -> None:
+        while not self._stop_event.is_set():
+            try:
+                snapshot = build_snapshot(profile=self.profile, limit=50)
+                self._save_snapshot(snapshot)
+                self.snapshot_count += 1
+            except Exception:
+                pass
+
+            time.sleep(self.interval_seconds)
+
+    def _save_snapshot(self, snapshot: SystemSnapshot) -> None:
+        path = self.output_dir / f"{snapshot.timestamp_utc.replace(':', '-')}_{snapshot.snapshot_id}.json"
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(asdict(snapshot), f, indent=2)
+        except Exception:
+            pass
+
+    def info(self) -> RecordingSessionInfo:
+        return RecordingSessionInfo(
+            session_id=self.session_id,
+            started_utc=self.started_utc,
+            stopped_utc=self.stopped_utc,
+            is_running=self.is_running,
+            profile=self.profile,
+            interval_seconds=self.interval_seconds,
+            mode=self.mode,
+            output_dir=str(self.output_dir),
+            snapshot_count=self.snapshot_count,
+        )
 
 
-def summarize_meaning(cpu_peak: float, net_peak_delta: int, gpu_available: bool, relevant_events: List[Dict[str, Any]]) -> List[str]:
-    meaning: List[str] = []
+# ============================================================
+# MCP Tools (Claude can call these)
+# ============================================================
 
-    # CPU
-    if cpu_peak >= 75:
-        meaning.append("CPU spike detected (strong fan trigger candidate).")
-    elif cpu_peak >= 35:
-        meaning.append("Moderate CPU activity detected (possible brief fan ramp).")
-    else:
-        meaning.append("CPU stayed low (fan spikes likely not CPU-driven).")
-
-    # GPU
-    if gpu_available:
-        meaning.append("GPU perf counters are available (GPU boost may contribute).")
-    else:
-        meaning.append("GPU telemetry not available via perf counters (GPU could still be the cause).")
-
-    # Network
-    if net_peak_delta > 10_000_000:
-        meaning.append("High network throughput spike detected (downloads/updates possible).")
-    elif net_peak_delta > 1_000_000:
-        meaning.append("Moderate network throughput detected.")
-    else:
-        meaning.append("Network activity appears normal.")
-
-    # Event logs
-    if relevant_events:
-        meaning.append(f"Event Logs: {len(relevant_events)} relevant events detected during the window.")
-        top_providers = {}
-        for e in relevant_events:
-            prov = e.get("provider") or "Unknown"
-            top_providers[prov] = top_providers.get(prov, 0) + 1
-        top_sorted = sorted(top_providers.items(), key=lambda x: x[1], reverse=True)[:5]
-        meaning.append("Top event providers correlated: " + ", ".join([f"{p} ({c})" for p, c in top_sorted]))
-    else:
-        meaning.append("Event Logs: No relevant system/update/defender/driver events detected in the window.")
-
-    return meaning
-
-
-# -----------------------------
-# MCP Tools
-# -----------------------------
 @mcp.tool()
-def get_full_snapshot() -> Dict[str, Any]:
+def hello(name: str = "World") -> Dict[str, Any]:
     """
-    One-call snapshot: system + network + processes + GPU + event logs.
+    Sanity test tool.
     """
     return {
-        "system": get_system_snapshot(),
-        "network": get_network_summary(),
-        "processes": safe_process_info(limit=12),
-        "gpu": get_gpu_snapshot_windows(),
-        "event_logs": get_recent_event_logs(minutes=3, max_events_per_log=10),
+        "meta": asdict(
+            ToolMeta(
+                tool="hello",
+                success=True,
+                timestamp_utc=utc_now_iso(),
+                message="Hello tool executed successfully.",
+            )
+        ),
+        "data": {"greeting": f"Timestamp : {utc_now_iso()} - Hello, {name}!"},
     }
 
 
 @mcp.tool()
-def start_live_fan_speed_spike_watch(duration_sec: int = 30, interval_ms: int = 500) -> Dict[str, Any]:
+def system_snapshot(profile: RecordingProfile = "basic", limit: int = 30) -> Dict[str, Any]:
     """
-    High-resolution monitoring session.
-    Captures snapshots repeatedly and correlates spikes + event logs.
+    Takes ONE snapshot instantly.
+    Useful for testing and quick analysis.
     """
-    global LAST_WATCH_SESSION
-
-    duration_sec = max(5, min(duration_sec, 180))
-    interval_ms = max(250, min(interval_ms, 3000))
-
-    session_id = str(uuid.uuid4())
-    start = time.time()
-    samples: List[Dict[str, Any]] = []
-
-    # Prime CPU percent
-    psutil.cpu_percent(interval=0.1)
-
-    # Collect event logs at the beginning (baseline)
-    baseline_events = get_recent_event_logs(minutes=3, max_events_per_log=15)
-
-    while True:
-        now = time.time()
-        if now - start > duration_sec:
-            break
-
-        snap = {
-            "system": get_system_snapshot(),
-            "network": get_network_summary(),
-            "processes": safe_process_info(limit=12),
-            "gpu": get_gpu_snapshot_windows(),
+    try:
+        snap = build_snapshot(profile=profile, limit=limit)
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="system_snapshot",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Snapshot collected successfully.",
+                )
+            ),
+            "data": asdict(snap),
         }
-        snap["snapshot_id"] = str(uuid.uuid4())
-        samples.append(snap)
-
-        time.sleep(interval_ms / 1000.0)
-
-    # Collect event logs again at the end
-    end_events = get_recent_event_logs(minutes=3, max_events_per_log=25)
-
-    # Merge events (simple: keep both sets)
-    merged_events = {
-        "baseline": baseline_events,
-        "end": end_events
-    }
-
-    relevant_events = extract_relevant_events(baseline_events) + extract_relevant_events(end_events)
-    relevant_events = relevant_events[:30]
-
-    # Analyze spikes
-    cpu_values = [s["system"]["cpu"]["percent"] for s in samples]
-    ram_values = [s["system"]["ram"]["percent"] for s in samples]
-
-    cpu_peak = max(cpu_values) if cpu_values else 0
-    cpu_avg = round(sum(cpu_values) / len(cpu_values), 2) if cpu_values else 0
-
-    ram_peak = max(ram_values) if ram_values else 0
-    ram_avg = round(sum(ram_values) / len(ram_values), 2) if ram_values else 0
-
-    net_peak_delta = 0
-    try:
-        net_peak_delta = compute_network_peak_delta(samples)
-    except Exception:
-        net_peak_delta = 0
-
-    gpu_available = samples[-1]["gpu"].get("available", False) if samples else False
-
-    meaning = summarize_meaning(cpu_peak, net_peak_delta, gpu_available, relevant_events)
-
-    # Store session
-    LAST_WATCH_SESSION = {
-        "session_id": session_id,
-        "started_utc": samples[0]["system"]["timestamp_utc"] if samples else utc_now(),
-        "ended_utc": samples[-1]["system"]["timestamp_utc"] if samples else utc_now(),
-        "duration_sec": duration_sec,
-        "interval_ms": interval_ms,
-        "stats": {
-            "cpu_avg": cpu_avg,
-            "cpu_peak": cpu_peak,
-            "ram_avg": ram_avg,
-            "ram_peak": ram_peak,
-            "net_peak_bytes_delta": net_peak_delta,
-            "sample_count": len(samples),
-        },
-        "meaning": meaning,
-        "relevant_events": relevant_events,
-        "event_logs_raw": merged_events,
-        "samples": samples
-    }
-
-    # Prompter-style output
-    return {
-        "title": "🔎 Live High-Resolution Monitoring — Fan Spike Watch",
-        "time_utc": utc_now(),
-        "session_id": session_id,
-        "snapshot_count": len(samples),
-        "cpu_avg": cpu_avg,
-        "cpu_peak": cpu_peak,
-        "ram_avg": ram_avg,
-        "ram_peak": ram_peak,
-        "net_peak_bytes_delta": net_peak_delta,
-        "event_log_hits": len(relevant_events),
-        "meaning": meaning,
-        "next_step": "Run export_last_watch_to_json() to save the full raw dataset."
-    }
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="system_snapshot",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Snapshot failed.",
+                )
+            ),
+            "error": {"error_type": type(e).__name__, "error_message": str(e)},
+        }
 
 
 @mcp.tool()
-def export_last_watch_to_json(output_path: str = "netprobe_last_watch.json") -> Dict[str, Any]:
+def start_recording(
+    profile: RecordingProfile = "security",
+    interval_seconds: int = 5,
+    mode: RecordingMode = "background",
+) -> Dict[str, Any]:
     """
-    Saves the last monitoring session to a JSON file locally.
+    Starts a background recorder session.
+    Saves snapshots to disk until stopped.
     """
-    global LAST_WATCH_SESSION
-
-    if not LAST_WATCH_SESSION:
-        return {"ok": False, "error": "No watch session found. Run start_live_fan_speed_spike_watch() first."}
-
     try:
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(LAST_WATCH_SESSION, f, indent=2)
+        session_id = str(uuid.uuid4())
+        output_dir = DATA_DIR / session_id
+
+        session = RecorderSession(
+            session_id=session_id,
+            profile=profile,
+            interval_seconds=interval_seconds,
+            mode=mode,
+            output_dir=output_dir,
+        )
+
+        with _sessions_lock:
+            _sessions[session_id] = session
+
+        session.start()
 
         return {
-            "ok": True,
-            "saved_to": output_path,
-            "session_id": LAST_WATCH_SESSION["session_id"],
-            "sample_count": LAST_WATCH_SESSION["stats"]["sample_count"],
-            "event_log_hits": len(LAST_WATCH_SESSION.get("relevant_events", []))
+            "meta": asdict(
+                ToolMeta(
+                    tool="start_recording",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Recording started successfully.",
+                )
+            ),
+            "data": asdict(session.info()),
         }
-    except Exception as e:
-        return {"ok": False, "error": str(e)}
 
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="start_recording",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Failed to start recording.",
+                )
+            ),
+            "error": {"error_type": type(e).__name__, "error_message": str(e)},
+        }
+
+
+@mcp.tool()
+def stop_recording(session_id: str) -> Dict[str, Any]:
+    """
+    Stops a running recording session.
+    """
+    try:
+        with _sessions_lock:
+            session = _sessions.get(session_id)
+
+        if not session:
+            return {
+                "meta": asdict(
+                    ToolMeta(
+                        tool="stop_recording",
+                        success=False,
+                        timestamp_utc=utc_now_iso(),
+                        message="Session not found.",
+                    )
+                ),
+                "error": {"error_type": "NotFound", "error_message": f"Session {session_id} not found."},
+            }
+
+        session.stop()
+
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="stop_recording",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Recording stopped successfully.",
+                )
+            ),
+            "data": asdict(session.info()),
+        }
+
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="stop_recording",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Failed to stop recording.",
+                )
+            ),
+            "error": {"error_type": type(e).__name__, "error_message": str(e)},
+        }
+
+
+@mcp.tool()
+def list_recordings() -> Dict[str, Any]:
+    """
+    Lists all known sessions (running + stopped) in memory.
+    """
+    try:
+        with _sessions_lock:
+            sessions = list(_sessions.values())
+
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="list_recordings",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Sessions listed successfully.",
+                )
+            ),
+            "data": {
+                "sessions": [asdict(s.info()) for s in sessions],
+                "count": len(sessions),
+            },
+        }
+
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="list_recordings",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Failed to list sessions.",
+                )
+            ),
+            "error": {"error_type": type(e).__name__, "error_message": str(e)},
+        }
+
+
+@mcp.tool()
+def read_session_snapshots(session_id: str, limit: int = 20) -> Dict[str, Any]:
+    """
+    Reads snapshots saved on disk for a session.
+    Useful for "incident replay".
+    """
+    try:
+        session_dir = DATA_DIR / session_id
+        if not session_dir.exists():
+            return {
+                "meta": asdict(
+                    ToolMeta(
+                        tool="read_session_snapshots",
+                        success=False,
+                        timestamp_utc=utc_now_iso(),
+                        message="Session directory not found on disk.",
+                    )
+                ),
+                "error": {"error_type": "NotFound", "error_message": f"No folder found for {session_id}"},
+            }
+
+        files = sorted(session_dir.glob("*.json"))
+        files = files[: max(1, limit)]
+
+        snapshots: List[Dict[str, Any]] = []
+        for f in files:
+            try:
+                with open(f, "r", encoding="utf-8") as fp:
+                    snapshots.append(json.load(fp))
+            except Exception:
+                continue
+
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="read_session_snapshots",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Snapshots read successfully.",
+                )
+            ),
+            "data": {
+                "session_id": session_id,
+                "snapshot_files_read": len(snapshots),
+                "snapshots": snapshots,
+            },
+        }
+
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="read_session_snapshots",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Failed to read snapshots.",
+                )
+            ),
+            "error": {"error_type": type(e).__name__, "error_message": str(e)},
+        }
+
+
+@mcp.tool()
+def generate_executive_report(session_id: str) -> Dict[str, Any]:
+    """
+    Generates a simple executive report from saved snapshots.
+    Transparent + evidence-based.
+    """
+    try:
+        session_dir = DATA_DIR / session_id
+        if not session_dir.exists():
+            return {
+                "meta": asdict(
+                    ToolMeta(
+                        tool="generate_executive_report",
+                        success=False,
+                        timestamp_utc=utc_now_iso(),
+                        message="Session directory not found.",
+                    )
+                ),
+                "error": {"error_type": "NotFound", "error_message": f"No session folder for {session_id}"},
+            }
+
+        files = sorted(session_dir.glob("*.json"))
+        if not files:
+            return {
+                "meta": asdict(
+                    ToolMeta(
+                        tool="generate_executive_report",
+                        success=False,
+                        timestamp_utc=utc_now_iso(),
+                        message="No snapshots found to analyze.",
+                    )
+                ),
+                "error": {"error_type": "EmptySession", "error_message": "No snapshots found."},
+            }
+
+        cpu_values: List[float] = []
+        ram_values: List[float] = []
+        all_alerts: List[str] = []
+        total_ports_exposed = 0
+
+        for f in files:
+            try:
+                with open(f, "r", encoding="utf-8") as fp:
+                    snap = json.load(fp)
+
+                cpu = snap.get("cpu_percent")
+                ram = snap.get("ram_percent")
+                alerts = snap.get("alerts") or []
+                ports = snap.get("listening_ports") or []
+
+                if isinstance(cpu, (int, float)):
+                    cpu_values.append(float(cpu))
+                if isinstance(ram, (int, float)):
+                    ram_values.append(float(ram))
+
+                for a in alerts:
+                    if isinstance(a, str):
+                        all_alerts.append(a)
+
+                for p in ports:
+                    if isinstance(p, dict) and p.get("local_ip") in ("0.0.0.0", "::"):
+                        total_ports_exposed += 1
+
+            except Exception:
+                continue
+
+        def safe_avg(nums: List[float]) -> Optional[float]:
+            if not nums:
+                return None
+            return sum(nums) / len(nums)
+
+        report = {
+            "session_id": session_id,
+            "snapshot_count": len(files),
+            "cpu_avg": safe_avg(cpu_values),
+            "cpu_max": max(cpu_values) if cpu_values else None,
+            "ram_avg": safe_avg(ram_values),
+            "ram_max": max(ram_values) if ram_values else None,
+            "alert_count": len(all_alerts),
+            "alerts_sample": all_alerts[:25],
+            "ports_exposed_count": total_ports_exposed,
+            "recommendations": [
+                "Review exposed ports bound to 0.0.0.0 / ::",
+                "Investigate spikes in CPU/RAM if present",
+                "Use a longer recording interval for day-long monitoring (e.g., 30s)",
+                "Export session to JSON for deeper analysis",
+            ],
+        }
+
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="generate_executive_report",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Executive report generated successfully.",
+                )
+            ),
+            "data": report,
+        }
+
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="generate_executive_report",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Failed to generate report.",
+                )
+            ),
+            "error": {"error_type": type(e).__name__, "error_message": str(e)},
+        }
+
+
+# ============================================================
+# Run Server
+# ============================================================
 
 if __name__ == "__main__":
-    mcp.run()
+    # For Claude Desktop MCP: use stdio
+    # For local HTTP testing: use transport="http"
+    mcp.run(transport="stdio")
