@@ -89,7 +89,7 @@ def safe_process_info(limit: int = 12) -> List[Dict[str, Any]]:
 def get_system_snapshot() -> Dict[str, Any]:
     cpu = psutil.cpu_percent(interval=0.25)
     ram = psutil.virtual_memory()
-    disk = psutil.disk_usage("C:\\")
+    disk = psutil.disk_usage("C://")
 
     return {
         "timestamp_utc": utc_now(),
