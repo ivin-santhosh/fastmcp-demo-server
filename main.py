@@ -513,7 +513,7 @@ def hello(name: str = "World") -> Dict[str, Any]:
                 message="Hello tool executed successfully.",
             )
         ),
-        "data": {"greeting": f"Hello, {name}!"},
+        "data": {"greeting": f"Timestamp : {utc_now_iso()} - Hello, {name}!"},
     }
 
 
