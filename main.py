@@ -1,14 +1,18 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
+import re
+import shutil
+import subprocess
+import threading
 import time
 import uuid
-import threading
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Literal, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Literal
 
 import psutil
 from fastmcp import FastMCP
@@ -17,16 +21,20 @@ from fastmcp import FastMCP
 # MCP Server
 # ============================================================
 
-mcp = FastMCP("AI System Recorder MCP Server")
+mcp = FastMCP("NetProbe MCP - Security Agent (Windows)")
 
 # ============================================================
 # Types (Azure Foundry / Strict Schema Friendly)
 # ============================================================
 
 ISO8601 = str
-RecordingProfile = Literal["basic", "security", "full"]
+
+# Pure security-only profiles (NO system health)
+RecordingProfile = Literal["security", "soc", "full_security"]
 RecordingMode = Literal["foreground", "background"]
 ExportFormat = Literal["json", "csv", "html"]
+
+SEVERITY_LEVELS = ("info", "low", "medium", "high", "critical")
 
 
 @dataclass
@@ -44,76 +52,6 @@ class ErrorInfo:
 
 
 @dataclass
-class NetworkSummary:
-    bytes_sent: int
-    bytes_recv: int
-    packets_sent: int
-    packets_recv: int
-    errin: int
-    errout: int
-    dropin: int
-    dropout: int
-
-
-@dataclass
-class ProcessInfo:
-    pid: int
-    name: Optional[str]
-    exe: Optional[str]
-    username: Optional[str]
-    status: Optional[str]
-    create_time_utc: Optional[ISO8601]
-    cpu_percent: Optional[float]
-    memory_rss: Optional[int]
-    memory_vms: Optional[int]
-    ppid: Optional[int]
-    cmdline: Optional[List[str]]
-
-
-@dataclass
-class ConnectionInfo:
-    pid: Optional[int]
-    process_name: Optional[str]
-    exe: Optional[str]
-    username: Optional[str]
-    status: str
-    local_ip: Optional[str]
-    local_port: Optional[int]
-    remote_ip: Optional[str]
-    remote_port: Optional[int]
-
-
-@dataclass
-class ListeningPortInfo:
-    pid: Optional[int]
-    process_name: Optional[str]
-    exe: Optional[str]
-    username: Optional[str]
-    local_ip: Optional[str]
-    local_port: Optional[int]
-
-
-@dataclass
-class SystemSnapshot:
-    snapshot_id: str
-    timestamp_utc: ISO8601
-    profile: RecordingProfile
-
-    cpu_percent: Optional[float]
-    ram_percent: Optional[float]
-    ram_used: Optional[int]
-    ram_total: Optional[int]
-
-    network: Optional[NetworkSummary]
-
-    top_processes: Optional[List[ProcessInfo]]
-    active_connections: Optional[List[ConnectionInfo]]
-    listening_ports: Optional[List[ListeningPortInfo]]
-
-    alerts: List[str]
-
-
-@dataclass
 class RecordingSessionInfo:
     session_id: str
     started_utc: ISO8601
@@ -126,17 +64,44 @@ class RecordingSessionInfo:
     snapshot_count: int
 
 
+@dataclass
+class SecuritySnapshot:
+    snapshot_id: str
+    timestamp_utc: ISO8601
+    profile: RecordingProfile
+
+    evidence: Dict[str, Any]
+    alerts: List[Dict[str, Any]]
+    soc_assessment: Dict[str, Any]
+    recommended_actions: List[str]
+    standards: Dict[str, Any]
+
+
 # ============================================================
-# Helpers (Safe + Robust)
+# Global in-memory state
+# ============================================================
+
+LAST_ALERTS: List[Dict[str, Any]] = []
+LAST_REPORT: Optional[Dict[str, Any]] = None
+
+_sessions_lock = threading.Lock()
+_sessions: Dict[str, "RecorderSession"] = {}
+
+# ============================================================
+# Storage
 # ============================================================
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "recordings"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-_sessions_lock = threading.Lock()
-_sessions: Dict[str, "RecorderSession"] = {}
+EVIDENCE_DIR = BASE_DIR / "evidence"
+EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
 
+
+# ============================================================
+# Utility (Robust execution wrappers)
+# ============================================================
 
 def utc_now_iso() -> ISO8601:
     return datetime.now(timezone.utc).isoformat()
@@ -149,277 +114,1142 @@ def safe_str(x: Any) -> Optional[str]:
         return None
 
 
-def safe_psutil_call(fn, default):
-    try:
-        return fn()
-    except Exception:
-        return default
-
-
-def safe_process_info(pid: Optional[int]) -> ProcessInfo:
+def sha256_file(path: str) -> Optional[str]:
     """
-    Safe process fetch.
+    Computes SHA256 for evidence integrity.
+    """
+    try:
+        h = hashlib.sha256()
+        with open(path, "rb") as f:
+            while True:
+                chunk = f.read(1024 * 1024)
+                if not chunk:
+                    break
+                h.update(chunk)
+        return h.hexdigest()
+    except Exception:
+        return None
+
+
+def run_cmd(cmd: List[str], timeout: int = 12) -> Tuple[int, str, str]:
+    """
+    Robust command runner.
+    Returns: (exit_code, stdout, stderr)
+    """
+    try:
+        p = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            shell=False,
+        )
+        return p.returncode, (p.stdout or "").strip(), (p.stderr or "").strip()
+    except Exception as e:
+        return 999, "", f"exception: {e}"
+
+
+def run_powershell(ps: str, timeout: int = 12) -> Tuple[int, str, str]:
+    """
+    Robust PowerShell runner.
+    """
+    return run_cmd(
+        ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", ps],
+        timeout=timeout,
+    )
+
+
+def is_admin() -> bool:
+    """
+    Best-effort admin check.
+    """
+    code, out, _ = run_powershell(
+        "[bool]([Security.Principal.WindowsPrincipal] "
+        "[Security.Principal.WindowsIdentity]::GetCurrent()"
+        ").IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)"
+    )
+    return code == 0 and out.strip().lower() == "true"
+
+
+# ============================================================
+# SOC Standards / Scoring Helpers
+# ============================================================
+
+def clamp_severity(level: str) -> str:
+    lvl = (level or "").strip().lower()
+    return lvl if lvl in SEVERITY_LEVELS else "medium"
+
+
+def severity_score(level: str) -> int:
+    """
+    Simple SOC-grade severity mapping (0-100).
+    """
+    lvl = clamp_severity(level)
+    mapping = {
+        "info": 5,
+        "low": 25,
+        "medium": 50,
+        "high": 75,
+        "critical": 95,
+    }
+    return mapping.get(lvl, 50)
+
+
+def mitre_guess(event: Dict[str, Any]) -> List[Dict[str, str]]:
+    """
+    Lightweight MITRE ATT&CK mapping heuristics.
+    Explainable + SOC-usable.
+    """
+    text = json.dumps(event, ensure_ascii=False).lower()
+
+    rules: List[Tuple[str, str, str]] = [
+        ("T1059", "Command and Scripting Interpreter", "powershell"),
+        ("T1569", "System Services", "service"),
+        ("T1053", "Scheduled Task/Job", "task"),
+        ("T1547", "Boot or Logon Autostart Execution", "run key"),
+        ("T1110", "Brute Force", "failed"),
+        ("T1021", "Remote Services", "rdp"),
+        ("T1047", "Windows Management Instrumentation", "wmi"),
+        ("T1105", "Ingress Tool Transfer", "download"),
+        ("T1071", "Application Layer Protocol", "http"),
+        ("T1078", "Valid Accounts", "logon"),
+    ]
+
+    hits: List[Dict[str, str]] = []
+    for tid, name, keyword in rules:
+        if keyword in text:
+            hits.append({"technique_id": tid, "name": name})
+
+    seen = set()
+    out: List[Dict[str, str]] = []
+    for h in hits:
+        if h["technique_id"] not in seen:
+            seen.add(h["technique_id"])
+            out.append(h)
+    return out[:6]
+
+
+# ============================================================
+# Evidence Collection (Security Only)
+# ============================================================
+
+def safe_process_attribution(pid: Optional[int]) -> Dict[str, Any]:
+    """
+    Safe PID -> process attribution.
     Never crashes the server.
     """
     if pid is None:
-        return ProcessInfo(
-            pid=-1,
-            name=None,
-            exe=None,
-            username=None,
-            status=None,
-            create_time_utc=None,
-            cpu_percent=None,
-            memory_rss=None,
-            memory_vms=None,
-            ppid=None,
-            cmdline=None,
-        )
+        return {"pid": None, "process": None, "exe": None, "username": None, "signed": None}
 
     try:
         p = psutil.Process(pid)
-
         with p.oneshot():
-            name = safe_psutil_call(p.name, None)
-            exe = safe_psutil_call(p.exe, None)
-            username = safe_psutil_call(p.username, None)
-            status = safe_psutil_call(p.status, None)
+            name = None
+            exe = None
+            username = None
+            try:
+                name = p.name()
+            except Exception:
+                pass
+            try:
+                exe = p.exe()
+            except Exception:
+                pass
+            try:
+                username = p.username()
+            except Exception:
+                pass
 
-            create_time = safe_psutil_call(p.create_time, None)
-            create_time_utc = (
-                datetime.fromtimestamp(create_time, tz=timezone.utc).isoformat()
-                if isinstance(create_time, (int, float))
-                else None
-            )
+        signed = None
+        if exe:
+            signed = verify_file_signature(exe).get("is_signed")
 
-            cpu_percent = safe_psutil_call(p.cpu_percent, None)
-            mem = safe_psutil_call(p.memory_info, None)
-
-            memory_rss = getattr(mem, "rss", None) if mem else None
-            memory_vms = getattr(mem, "vms", None) if mem else None
-
-            ppid = safe_psutil_call(p.ppid, None)
-            cmdline = safe_psutil_call(p.cmdline, None)
-
-        return ProcessInfo(
-            pid=pid,
-            name=name,
-            exe=exe,
-            username=username,
-            status=safe_str(status),
-            create_time_utc=create_time_utc,
-            cpu_percent=float(cpu_percent) if cpu_percent is not None else None,
-            memory_rss=int(memory_rss) if memory_rss is not None else None,
-            memory_vms=int(memory_vms) if memory_vms is not None else None,
-            ppid=int(ppid) if ppid is not None else None,
-            cmdline=list(cmdline) if isinstance(cmdline, list) else None,
-        )
-
-    except (psutil.NoSuchProcess, psutil.AccessDenied):
-        return ProcessInfo(
-            pid=pid,
-            name=None,
-            exe=None,
-            username=None,
-            status=None,
-            create_time_utc=None,
-            cpu_percent=None,
-            memory_rss=None,
-            memory_vms=None,
-            ppid=None,
-            cmdline=None,
-        )
+        return {"pid": pid, "process": name, "exe": exe, "username": username, "signed": signed}
     except Exception:
-        return ProcessInfo(
-            pid=pid,
-            name=None,
-            exe=None,
-            username=None,
-            status=None,
-            create_time_utc=None,
-            cpu_percent=None,
-            memory_rss=None,
-            memory_vms=None,
-            ppid=None,
-            cmdline=None,
-        )
+        return {"pid": pid, "process": None, "exe": None, "username": None, "signed": None}
 
 
-def safe_net_connections(kind: str = "inet") -> List[Any]:
+def get_external_connections(limit: int = 250) -> List[Dict[str, Any]]:
     """
-    psutil.net_connections is the #1 crash point.
-    This wrapper prevents the server from dying.
+    Returns external network connections with process attribution.
+    NO packet payload capture.
     """
+    results: List[Dict[str, Any]] = []
+    limit = max(50, min(limit, 2000))
+
     try:
-        return psutil.net_connections(kind=kind)
-    except psutil.AccessDenied:
-        return []
-    except Exception:
-        return []
+        conns = psutil.net_connections(kind="inet")
+    except Exception as e:
+        return [{"error": f"psutil.net_connections failed: {str(e)}"}]
 
-
-def safe_net_io() -> Optional[NetworkSummary]:
-    try:
-        stats = psutil.net_io_counters()
-        return NetworkSummary(
-            bytes_sent=int(stats.bytes_sent),
-            bytes_recv=int(stats.bytes_recv),
-            packets_sent=int(stats.packets_sent),
-            packets_recv=int(stats.packets_recv),
-            errin=int(stats.errin),
-            errout=int(stats.errout),
-            dropin=int(stats.dropin),
-            dropout=int(stats.dropout),
-        )
-    except Exception:
-        return None
-
-
-def safe_memory() -> Tuple[Optional[float], Optional[int], Optional[int]]:
-    try:
-        vm = psutil.virtual_memory()
-        return float(vm.percent), int(vm.used), int(vm.total)
-    except Exception:
-        return None, None, None
-
-
-def safe_cpu_percent() -> Optional[float]:
-    try:
-        return float(psutil.cpu_percent(interval=0.2))
-    except Exception:
-        return None
-
-
-def detect_basic_alerts(snapshot: SystemSnapshot) -> List[str]:
-    """
-    Very safe lightweight alert engine.
-    No "malware detection" claims. Just anomaly indicators.
-    """
-    alerts: List[str] = []
-
-    if snapshot.cpu_percent is not None and snapshot.cpu_percent >= 85:
-        alerts.append(f"High CPU usage detected: {snapshot.cpu_percent:.2f}%")
-
-    if snapshot.ram_percent is not None and snapshot.ram_percent >= 90:
-        alerts.append(f"High RAM usage detected: {snapshot.ram_percent:.2f}%")
-
-    # Port 0.0.0.0 warnings
-    if snapshot.listening_ports:
-        for p in snapshot.listening_ports:
-            if p.local_ip in ("0.0.0.0", "::"):
-                alerts.append(
-                    f"Port exposed on all interfaces: {p.local_ip}:{p.local_port} (PID={p.pid}, Process={p.process_name})"
-                )
-
-    return alerts
-
-
-# ============================================================
-# Snapshot Generator
-# ============================================================
-
-def build_snapshot(profile: RecordingProfile, limit: int = 30) -> SystemSnapshot:
-    snapshot_id = str(uuid.uuid4())
-    timestamp = utc_now_iso()
-
-    cpu = safe_cpu_percent()
-    ram_percent, ram_used, ram_total = safe_memory()
-    net = safe_net_io()
-
-    top_processes: Optional[List[ProcessInfo]] = None
-    active_connections: Optional[List[ConnectionInfo]] = None
-    listening_ports: Optional[List[ListeningPortInfo]] = None
-
-    # BASIC profile only captures system stats
-    if profile in ("security", "full"):
-        # Processes
-        procs: List[ProcessInfo] = []
+    for c in conns:
         try:
-            for p in psutil.process_iter(attrs=[]):
-                if len(procs) >= max(1, limit):
-                    break
-                procs.append(safe_process_info(p.pid))
-        except Exception:
-            pass
-        top_processes = procs
+            if not c.raddr:
+                continue
 
-        # Connections
-        conns = safe_net_connections(kind="inet")
-        conn_results: List[ConnectionInfo] = []
+            remote_ip = getattr(c.raddr, "ip", None)
+            remote_port = getattr(c.raddr, "port", None)
 
-        for c in conns[: max(1, limit)]:
-            proc = safe_process_info(c.pid)
+            if not remote_ip:
+                continue
+
+            if str(remote_ip).startswith("127.") or str(remote_ip) in ("0.0.0.0", "::1"):
+                continue
+
+            proc = safe_process_attribution(c.pid)
 
             local_ip = getattr(getattr(c, "laddr", None), "ip", None)
             local_port = getattr(getattr(c, "laddr", None), "port", None)
 
-            remote_ip = getattr(getattr(c, "raddr", None), "ip", None)
-            remote_port = getattr(getattr(c, "raddr", None), "port", None)
-
-            conn_results.append(
-                ConnectionInfo(
-                    pid=proc.pid if proc.pid != -1 else None,
-                    process_name=proc.name,
-                    exe=proc.exe,
-                    username=proc.username,
-                    status=safe_str(getattr(c, "status", "UNKNOWN")) or "UNKNOWN",
-                    local_ip=safe_str(local_ip),
-                    local_port=int(local_port) if isinstance(local_port, int) else None,
-                    remote_ip=safe_str(remote_ip),
-                    remote_port=int(remote_port) if isinstance(remote_port, int) else None,
-                )
+            results.append(
+                {
+                    "pid": proc["pid"],
+                    "process": proc["process"],
+                    "exe": proc["exe"],
+                    "username": proc["username"],
+                    "signed": proc.get("signed"),
+                    "local_ip": safe_str(local_ip),
+                    "local_port": int(local_port) if isinstance(local_port, int) else None,
+                    "remote_ip": safe_str(remote_ip),
+                    "remote_port": int(remote_port) if isinstance(remote_port, int) else None,
+                    "status": safe_str(getattr(c, "status", "UNKNOWN")) or "UNKNOWN",
+                    "protocol": "TCP" if getattr(c, "type", None) == 1 else "UDP",
+                }
             )
+        except Exception:
+            continue
 
-        active_connections = conn_results
+    results.sort(key=lambda x: (str(x.get("remote_ip")), int(x.get("pid") or 0)))
+    return results[:limit]
 
-        # Listening ports
-        listening: List[ListeningPortInfo] = []
-        for c in conns:
+
+def get_running_process_inventory(limit: int = 200) -> List[Dict[str, Any]]:
+    """
+    Security inventory: process, pid, exe path, user, cmdline.
+    """
+    out: List[Dict[str, Any]] = []
+    limit = max(50, min(limit, 5000))
+
+    for p in psutil.process_iter(attrs=["pid", "name", "username"]):
+        try:
+            pid = int(p.info["pid"])
+            proc = psutil.Process(pid)
+
+            exe = None
+            cmdline = None
+            ppid = None
+
             try:
-                if safe_str(getattr(c, "status", "")).upper() == "LISTEN":
-                    proc = safe_process_info(c.pid)
-
-                    local_ip = getattr(getattr(c, "laddr", None), "ip", None)
-                    local_port = getattr(getattr(c, "laddr", None), "port", None)
-
-                    listening.append(
-                        ListeningPortInfo(
-                            pid=proc.pid if proc.pid != -1 else None,
-                            process_name=proc.name,
-                            exe=proc.exe,
-                            username=proc.username,
-                            local_ip=safe_str(local_ip),
-                            local_port=int(local_port) if isinstance(local_port, int) else None,
-                        )
-                    )
-                    if len(listening) >= max(1, limit):
-                        break
+                exe = proc.exe()
             except Exception:
+                pass
+
+            try:
+                cmdline_list = proc.cmdline()
+                cmdline = " ".join(cmdline_list[:60]) if isinstance(cmdline_list, list) else None
+            except Exception:
+                pass
+
+            try:
+                ppid = proc.ppid()
+            except Exception:
+                pass
+
+            signed = None
+            if exe:
+                signed = verify_file_signature(exe).get("is_signed")
+
+            out.append(
+                {
+                    "pid": pid,
+                    "ppid": int(ppid) if isinstance(ppid, int) else None,
+                    "name": p.info.get("name"),
+                    "username": p.info.get("username"),
+                    "exe": exe,
+                    "cmdline": cmdline,
+                    "signed": signed,
+                }
+            )
+        except Exception:
+            continue
+
+    out.sort(key=lambda x: str(x.get("name") or ""))
+    return out[:limit]
+
+
+def get_listening_ports(limit: int = 250) -> List[Dict[str, Any]]:
+    """
+    Returns listening ports (security view).
+    """
+    limit = max(20, min(limit, 3000))
+    results: List[Dict[str, Any]] = []
+
+    try:
+        conns = psutil.net_connections(kind="inet")
+    except Exception as e:
+        return [{"error": f"psutil.net_connections failed: {str(e)}"}]
+
+    for c in conns:
+        try:
+            if safe_str(getattr(c, "status", "")).upper() != "LISTEN":
                 continue
 
-        listening_ports = listening
+            proc = safe_process_attribution(c.pid)
 
-    snapshot = SystemSnapshot(
-        snapshot_id=snapshot_id,
-        timestamp_utc=timestamp,
-        profile=profile,
-        cpu_percent=cpu,
-        ram_percent=ram_percent,
-        ram_used=ram_used,
-        ram_total=ram_total,
-        network=net,
-        top_processes=top_processes,
-        active_connections=active_connections,
-        listening_ports=listening_ports,
-        alerts=[],
-    )
+            local_ip = getattr(getattr(c, "laddr", None), "ip", None)
+            local_port = getattr(getattr(c, "laddr", None), "port", None)
 
-    snapshot.alerts = detect_basic_alerts(snapshot)
-    return snapshot
+            results.append(
+                {
+                    "pid": proc["pid"],
+                    "process": proc["process"],
+                    "exe": proc["exe"],
+                    "username": proc["username"],
+                    "signed": proc.get("signed"),
+                    "local_ip": safe_str(local_ip),
+                    "local_port": int(local_port) if isinstance(local_port, int) else None,
+                }
+            )
+
+            if len(results) >= limit:
+                break
+        except Exception:
+            continue
+
+    results.sort(key=lambda x: (str(x.get("local_ip")), int(x.get("local_port") or 0)))
+    return results[:limit]
 
 
 # ============================================================
-# Recording Engine
+# Critical Reliability: Dual-Path Evidence Fetching
+# (wevtutil + powershell already done for event logs)
+# ============================================================
+
+def verify_file_signature(path: str) -> Dict[str, Any]:
+    """
+    Uses PowerShell Get-AuthenticodeSignature.
+    """
+    ps = rf"""
+    try {{
+      $sig = Get-AuthenticodeSignature -FilePath "{path}"
+      [PSCustomObject]@{{
+        Status = $sig.Status.ToString()
+        SignerCertificate = $sig.SignerCertificate.Subject
+        TimeStamperCertificate = $sig.TimeStamperCertificate.Subject
+      }} | ConvertTo-Json -Depth 3
+    }} catch {{
+      ""
+    }}
+    """
+    code, out, err = run_powershell(ps, timeout=12)
+    if code != 0 or not out:
+        return {"available": False, "error": err or "signature check failed", "is_signed": None}
+
+    try:
+        data = json.loads(out)
+        status = str(data.get("Status") or "")
+        return {
+            "available": True,
+            "data": data,
+            "is_signed": status.lower() == "valid",
+        }
+    except Exception:
+        return {"available": True, "raw": out[:2000], "is_signed": None}
+
+
+# ============================================================
+# Windows Event Logs (SOC-grade)
+# ============================================================
+
+WINDOWS_SECURITY_EVENT_IDS: Dict[int, str] = {
+    4624: "Successful logon",
+    4625: "Failed logon",
+    4634: "Logoff",
+    4648: "Logon with explicit credentials",
+    4672: "Special privileges assigned",
+    4720: "User account created",
+    4722: "User enabled",
+    4723: "Attempt to change password",
+    4724: "Password reset attempt",
+    4728: "User added to security-enabled group",
+    4732: "User added to local group",
+    4735: "Local group modified",
+    4740: "Account locked out",
+    4697: "Service installed",
+    7045: "Service created (System log, but often seen)",
+    4698: "Scheduled task created",
+    4699: "Scheduled task deleted",
+    4702: "Scheduled task updated",
+}
+
+
+def read_eventlog_via_wevtutil(log_name: str, minutes: int = 60, max_events: int = 80) -> List[Dict[str, Any]]:
+    minutes = max(1, min(minutes, 1440))
+    max_events = max(10, min(max_events, 500))
+
+    ms = minutes * 60 * 1000
+    query = f"*[System[TimeCreated[timediff(@SystemTime) <= {ms}]]]"
+    cmd = ["wevtutil", "qe", log_name, f"/q:{query}", "/f:Text", f"/c:{max_events}"]
+
+    code, out, err = run_cmd(cmd, timeout=18)
+    if code != 0 or not out:
+        return [{"error": f"wevtutil failed for {log_name}", "stderr": err}]
+
+    blocks = out.split("\n\n")
+    events: List[Dict[str, Any]] = []
+
+    for b in blocks:
+        b = b.strip()
+        if not b:
+            continue
+
+        m_id = re.search(r"Event ID:\s*(\d+)", b)
+        eid = int(m_id.group(1)) if m_id else None
+
+        m_time = re.search(r"Date:\s*(.+)", b)
+        date_str = m_time.group(1).strip() if m_time else None
+
+        m_provider = re.search(r"Provider Name:\s*(.+)", b)
+        provider = m_provider.group(1).strip() if m_provider else log_name
+
+        message = b[-1200:] if len(b) > 1200 else b
+
+        events.append(
+            {
+                "log": log_name,
+                "event_id": eid,
+                "event_name": WINDOWS_SECURITY_EVENT_IDS.get(eid, None) if eid else None,
+                "provider": provider,
+                "time_raw": date_str,
+                "message_tail": message,
+            }
+        )
+
+    return events[:max_events]
+
+
+def read_eventlog_via_powershell(log_name: str, minutes: int = 60, max_events: int = 80) -> List[Dict[str, Any]]:
+    minutes = max(1, min(minutes, 1440))
+    max_events = max(10, min(max_events, 500))
+
+    ps = rf"""
+    $since = (Get-Date).AddMinutes(-{minutes})
+    try {{
+      Get-WinEvent -FilterHashtable @{{LogName='{log_name}'; StartTime=$since}} -MaxEvents {max_events} |
+      Select-Object TimeCreated, Id, ProviderName, LevelDisplayName, Message |
+      ConvertTo-Json -Depth 3
+    }} catch {{
+      ""
+    }}
+    """
+    code, out, err = run_powershell(ps, timeout=18)
+    if code != 0 or not out:
+        return [{"error": f"powershell Get-WinEvent failed for {log_name}", "stderr": err}]
+
+    try:
+        data = json.loads(out)
+        if isinstance(data, dict):
+            data = [data]
+    except Exception:
+        return [{"error": "failed to parse powershell json", "stderr": err, "raw": out[:4000]}]
+
+    events: List[Dict[str, Any]] = []
+    for e in data:
+        try:
+            eid = int(e.get("Id")) if e.get("Id") is not None else None
+            msg = (e.get("Message") or "")[:1200]
+
+            events.append(
+                {
+                    "log": log_name,
+                    "event_id": eid,
+                    "event_name": WINDOWS_SECURITY_EVENT_IDS.get(eid, None) if eid else None,
+                    "provider": e.get("ProviderName"),
+                    "level": e.get("LevelDisplayName"),
+                    "time": safe_str(e.get("TimeCreated")),
+                    "message": msg,
+                }
+            )
+        except Exception:
+            continue
+
+    return events[:max_events]
+
+
+def collect_recent_eventlogs(minutes: int = 60) -> Dict[str, Any]:
+    logs_to_pull = [
+        "Security",
+        "System",
+        "Application",
+        "Microsoft-Windows-Windows Defender/Operational",
+        "Microsoft-Windows-WindowsUpdateClient/Operational",
+    ]
+
+    out: Dict[str, Any] = {"minutes": minutes, "sources": {}, "events": {}}
+
+    for log in logs_to_pull:
+        a = read_eventlog_via_wevtutil(log, minutes=minutes, max_events=80)
+        if a and not (len(a) == 1 and "error" in a[0]):
+            out["sources"][log] = "wevtutil"
+            out["events"][log] = a
+            continue
+
+        b = read_eventlog_via_powershell(log, minutes=minutes, max_events=80)
+        out["sources"][log] = "powershell"
+        out["events"][log] = b
+
+    return out
+
+
+# ============================================================
+# Persistence + Hardening Evidence (NEW)
+# ============================================================
+
+def get_startup_persistence() -> Dict[str, Any]:
+    """
+    Checks Run keys + Startup folders.
+    """
+    ps = r"""
+    try {
+      $paths = @(
+        "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run",
+        "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run",
+        "HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce",
+        "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce"
+      )
+
+      $runKeys = foreach ($p in $paths) {
+        try {
+          Get-ItemProperty -Path $p | Select-Object * -ExcludeProperty PS* |
+          ForEach-Object {
+            $_.PSObject.Properties |
+            Where-Object { $_.Name -ne "" -and $_.Value -ne $null } |
+            ForEach-Object {
+              [PSCustomObject]@{
+                Location = $p
+                Name = $_.Name
+                Value = $_.Value
+              }
+            }
+          }
+        } catch {}
+      }
+
+      $startupFolders = @(
+        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup",
+        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
+      )
+
+      $startupItems = foreach ($sf in $startupFolders) {
+        try {
+          Get-ChildItem -Path $sf -ErrorAction SilentlyContinue |
+          Select-Object FullName, Name, LastWriteTime
+        } catch {}
+      }
+
+      [PSCustomObject]@{
+        RunKeys = $runKeys
+        StartupItems = $startupItems
+      } | ConvertTo-Json -Depth 5
+    } catch { "" }
+    """
+    code, out, err = run_powershell(ps, timeout=20)
+    if code != 0 or not out:
+        return {"available": False, "error": err or "persistence scan failed"}
+    try:
+        return {"available": True, "data": json.loads(out)}
+    except Exception:
+        return {"available": True, "raw": out[:4000]}
+
+
+def get_scheduled_tasks_inventory(limit: int = 250) -> Dict[str, Any]:
+    """
+    Enumerates scheduled tasks (not only event logs).
+    """
+    limit = max(10, min(limit, 2000))
+    ps = rf"""
+    try {{
+      Get-ScheduledTask |
+      Select-Object -First {limit} TaskName, TaskPath, State, Author, Description |
+      ConvertTo-Json -Depth 4
+    }} catch {{
+      ""
+    }}
+    """
+    code, out, err = run_powershell(ps, timeout=18)
+    if code != 0 or not out:
+        return {"available": False, "error": err or "scheduled tasks unavailable"}
+    try:
+        data = json.loads(out)
+        if isinstance(data, dict):
+            data = [data]
+        return {"available": True, "tasks": data, "count": len(data)}
+    except Exception:
+        return {"available": True, "raw": out[:4000]}
+
+
+def get_services_inventory(limit: int = 250) -> Dict[str, Any]:
+    """
+    Enumerates services and their binary paths.
+    """
+    limit = max(10, min(limit, 4000))
+    ps = rf"""
+    try {{
+      Get-CimInstance Win32_Service |
+      Select-Object -First {limit} Name, DisplayName, State, StartMode, PathName, StartName |
+      ConvertTo-Json -Depth 4
+    }} catch {{
+      ""
+    }}
+    """
+    code, out, err = run_powershell(ps, timeout=20)
+    if code != 0 or not out:
+        return {"available": False, "error": err or "services unavailable"}
+    try:
+        data = json.loads(out)
+        if isinstance(data, dict):
+            data = [data]
+        return {"available": True, "services": data, "count": len(data)}
+    except Exception:
+        return {"available": True, "raw": out[:4000]}
+
+
+def get_defender_exclusions() -> Dict[str, Any]:
+    ps = r"""
+    try {
+      $pref = Get-MpPreference
+      [PSCustomObject]@{
+        ExclusionPath = $pref.ExclusionPath
+        ExclusionProcess = $pref.ExclusionProcess
+        ExclusionExtension = $pref.ExclusionExtension
+      } | ConvertTo-Json -Depth 4
+    } catch { "" }
+    """
+    code, out, err = run_powershell(ps, timeout=15)
+    if code != 0 or not out:
+        return {"available": False, "error": err or "Defender exclusions unavailable"}
+    try:
+        return {"available": True, "data": json.loads(out)}
+    except Exception:
+        return {"available": True, "raw": out[:2000]}
+
+
+def get_hosts_file_status() -> Dict[str, Any]:
+    """
+    Hosts file tampering is a common persistence trick.
+    """
+    hosts = r"C:\Windows\System32\drivers\etc\hosts"
+    try:
+        if not os.path.exists(hosts):
+            return {"exists": False}
+
+        with open(hosts, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
+
+        suspicious_lines = []
+        for line in content.splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "microsoft" in line.lower() or "windowsupdate" in line.lower():
+                suspicious_lines.append(line)
+
+        return {
+            "exists": True,
+            "path": hosts,
+            "sha256": sha256_file(hosts),
+            "suspicious_lines": suspicious_lines[:50],
+        }
+    except Exception as e:
+        return {"exists": None, "error": str(e)}
+
+
+def get_dns_cache(limit: int = 200) -> Dict[str, Any]:
+    """
+    DNS cache is evidence for C2 domains.
+    """
+    limit = max(20, min(limit, 2000))
+    ps = rf"""
+    try {{
+      Get-DnsClientCache |
+      Select-Object -First {limit} Entry, Data, Type, Status |
+      ConvertTo-Json -Depth 3
+    }} catch {{
+      ""
+    }}
+    """
+    code, out, err = run_powershell(ps, timeout=18)
+    if code != 0 or not out:
+        return {"available": False, "error": err or "DNS cache unavailable"}
+    try:
+        data = json.loads(out)
+        if isinstance(data, dict):
+            data = [data]
+        return {"available": True, "entries": data, "count": len(data)}
+    except Exception:
+        return {"available": True, "raw": out[:4000]}
+
+
+def get_local_admins() -> Dict[str, Any]:
+    """
+    Lists local Administrators group membership.
+    """
+    ps = r"""
+    try {
+      Get-LocalGroupMember -Group "Administrators" |
+      Select-Object Name, ObjectClass, PrincipalSource |
+      ConvertTo-Json -Depth 3
+    } catch { "" }
+    """
+    code, out, err = run_powershell(ps, timeout=15)
+    if code != 0 or not out:
+        return {"available": False, "error": err or "local admins unavailable"}
+    try:
+        data = json.loads(out)
+        if isinstance(data, dict):
+            data = [data]
+        return {"available": True, "members": data, "count": len(data)}
+    except Exception:
+        return {"available": True, "raw": out[:3000]}
+
+
+# ============================================================
+# Detection Logic (Efficient + Explainable)
+# ============================================================
+
+SUSPICIOUS_PROCESS_KEYWORDS: List[str] = [
+    "mimikatz",
+    "powershell -enc",
+    "powershell.exe -enc",
+    "rundll32",
+    "regsvr32",
+    "certutil",
+    "bitsadmin",
+    "mshta",
+    "wmic",
+    "psexec",
+    "nc.exe",
+    "netcat",
+]
+
+
+def detect_suspicious_processes(processes: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    alerts: List[Dict[str, Any]] = []
+
+    for p in processes:
+        name = (p.get("name") or "").lower()
+        cmd = (p.get("cmdline") or "").lower()
+        exe = (p.get("exe") or "").lower()
+        signed = p.get("signed")
+
+        hay = f"{name} {cmd} {exe}"
+
+        for kw in SUSPICIOUS_PROCESS_KEYWORDS:
+            if kw in hay:
+                alerts.append(
+                    {
+                        "type": "suspicious_process",
+                        "severity": "high",
+                        "reason": f"Matched suspicious keyword: {kw}",
+                        "process": p,
+                        "mitre": [{"technique_id": "T1059", "name": "Command and Scripting Interpreter"}],
+                    }
+                )
+                break
+
+        if exe and ("\\temp\\" in exe or "\\appdata\\roaming\\" in exe):
+            alerts.append(
+                {
+                    "type": "process_from_suspicious_path",
+                    "severity": "high",
+                    "reason": "Process executable located in Temp/AppData (common malware location)",
+                    "process": p,
+                    "mitre": [{"technique_id": "T1105", "name": "Ingress Tool Transfer"}],
+                }
+            )
+
+        if signed is False:
+            alerts.append(
+                {
+                    "type": "unsigned_running_binary",
+                    "severity": "medium",
+                    "reason": "Running executable is not Authenticode-signed (may be suspicious)",
+                    "process": p,
+                    "mitre": [{"technique_id": "T1036", "name": "Masquerading"}],
+                }
+            )
+
+    return alerts
+
+
+def detect_bruteforce_from_security_events(events: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    failed = [e for e in events if e.get("event_id") == 4625]
+    if len(failed) >= 12:
+        return {
+            "type": "bruteforce_suspected",
+            "severity": "critical",
+            "reason": f"{len(failed)} failed logons detected in window",
+            "event_id": 4625,
+            "mitre": [{"technique_id": "T1110", "name": "Brute Force"}],
+        }
+    if len(failed) >= 6:
+        return {
+            "type": "bruteforce_suspected",
+            "severity": "high",
+            "reason": f"{len(failed)} failed logons detected in window",
+            "event_id": 4625,
+            "mitre": [{"technique_id": "T1110", "name": "Brute Force"}],
+        }
+    return None
+
+
+def detect_service_install(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    alerts: List[Dict[str, Any]] = []
+    for e in events:
+        if e.get("event_id") in (4697, 7045):
+            alerts.append(
+                {
+                    "type": "service_install_detected",
+                    "severity": "high",
+                    "reason": "Service installation event detected",
+                    "event": e,
+                    "mitre": [{"technique_id": "T1569", "name": "System Services"}],
+                }
+            )
+    return alerts
+
+
+def detect_scheduled_task_changes(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    alerts: List[Dict[str, Any]] = []
+    for e in events:
+        if e.get("event_id") in (4698, 4702, 4699):
+            alerts.append(
+                {
+                    "type": "scheduled_task_change",
+                    "severity": "high",
+                    "reason": "Scheduled task creation/modification detected",
+                    "event": e,
+                    "mitre": [{"technique_id": "T1053", "name": "Scheduled Task/Job"}],
+                }
+            )
+    return alerts
+
+
+def detect_suspicious_external_connections(conns: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    suspicious_ports = {4444, 1337, 31337, 6666, 6667, 1080, 9050}
+    alerts: List[Dict[str, Any]] = []
+
+    for c in conns:
+        rp = c.get("remote_port")
+        proc = (c.get("process") or "").lower()
+        exe = (c.get("exe") or "").lower()
+
+        if rp in suspicious_ports:
+            alerts.append(
+                {
+                    "type": "suspicious_connection",
+                    "severity": "high",
+                    "reason": f"Connection to suspicious remote port {rp}",
+                    "connection": c,
+                    "mitre": [{"technique_id": "T1071", "name": "Application Layer Protocol"}],
+                }
+            )
+            continue
+
+        if any(x in proc for x in ["powershell", "mshta", "rundll32", "regsvr32", "wmic"]):
+            alerts.append(
+                {
+                    "type": "lolbin_network_activity",
+                    "severity": "medium",
+                    "reason": f"Connection made by LOLBin-like process: {proc}",
+                    "connection": c,
+                    "mitre": [{"technique_id": "T1059", "name": "Command and Scripting Interpreter"}],
+                }
+            )
+
+        if "\\appdata\\roaming\\" in exe or "\\temp\\" in exe:
+            alerts.append(
+                {
+                    "type": "network_from_suspicious_path",
+                    "severity": "high",
+                    "reason": "Network connection from executable in Temp/AppData (common malware location)",
+                    "connection": c,
+                    "mitre": [{"technique_id": "T1105", "name": "Ingress Tool Transfer"}],
+                }
+            )
+
+    return alerts
+
+
+def detect_exposed_listening_ports(ports: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Security: 0.0.0.0 / :: listening ports are often risky.
+    """
+    alerts: List[Dict[str, Any]] = []
+    for p in ports:
+        ip = p.get("local_ip")
+        port = p.get("local_port")
+        if ip in ("0.0.0.0", "::"):
+            alerts.append(
+                {
+                    "type": "exposed_listening_port",
+                    "severity": "medium",
+                    "reason": f"Port bound to all interfaces: {ip}:{port}",
+                    "port": p,
+                    "mitre": [{"technique_id": "T1021", "name": "Remote Services"}],
+                }
+            )
+    return alerts
+
+
+# ============================================================
+# Defender + Firewall (Automated Response)
+# ============================================================
+
+def defender_status() -> Dict[str, Any]:
+    ps = r"""
+    try {
+      $mp = Get-MpComputerStatus
+      $pref = Get-MpPreference
+      [PSCustomObject]@{
+        AMServiceEnabled = $mp.AMServiceEnabled
+        AntispywareEnabled = $mp.AntispywareEnabled
+        AntivirusEnabled = $mp.AntivirusEnabled
+        RealTimeProtectionEnabled = $mp.RealTimeProtectionEnabled
+        NISEnabled = $mp.NISEnabled
+        QuickScanAge = $mp.QuickScanAge
+        FullScanAge = $mp.FullScanAge
+        SignatureAge = $mp.AntivirusSignatureAge
+        ExclusionCount = ($pref.ExclusionPath.Count + $pref.ExclusionProcess.Count + $pref.ExclusionExtension.Count)
+      } | ConvertTo-Json -Depth 3
+    } catch { "" }
+    """
+    code, out, err = run_powershell(ps, timeout=15)
+    if code != 0 or not out:
+        return {"available": False, "error": err or "Defender status unavailable"}
+    try:
+        return {"available": True, "data": json.loads(out)}
+    except Exception:
+        return {"available": True, "raw": out[:2000]}
+
+
+def defender_quick_scan() -> Dict[str, Any]:
+    ps = r"try { Start-MpScan -ScanType QuickScan; 'OK' } catch { 'ERROR' }"
+    code, out, err = run_powershell(ps, timeout=12)
+    return {"ok": code == 0 and "OK" in out, "stdout": out, "stderr": err}
+
+
+def defender_full_scan() -> Dict[str, Any]:
+    ps = r"try { Start-MpScan -ScanType FullScan; 'OK' } catch { 'ERROR' }"
+    code, out, err = run_powershell(ps, timeout=12)
+    return {"ok": code == 0 and "OK" in out, "stdout": out, "stderr": err}
+
+
+def defender_update_signatures() -> Dict[str, Any]:
+    ps = r"try { Update-MpSignature; 'OK' } catch { 'ERROR' }"
+    code, out, err = run_powershell(ps, timeout=18)
+    return {"ok": code == 0 and "OK" in out, "stdout": out, "stderr": err}
+
+
+def firewall_block_ip(ip: str) -> Dict[str, Any]:
+    rule_name = f"NetProbe_BlockIP_{ip}_{uuid.uuid4().hex[:8]}"
+    ps = rf"""
+    try {{
+      New-NetFirewallRule -DisplayName "{rule_name}_OUT" -Direction Outbound -Action Block -RemoteAddress {ip} | Out-Null
+      New-NetFirewallRule -DisplayName "{rule_name}_IN" -Direction Inbound -Action Block -RemoteAddress {ip} | Out-Null
+      "OK"
+    }} catch {{
+      "ERROR"
+    }}
+    """
+    code, out, err = run_powershell(ps, timeout=18)
+    return {"ok": code == 0 and "OK" in out, "rule_prefix": rule_name, "stdout": out, "stderr": err}
+
+
+def firewall_lockdown_mode() -> Dict[str, Any]:
+    prefix = f"NetProbe_Lockdown_{uuid.uuid4().hex[:8]}"
+    ps = rf"""
+    try {{
+      New-NetFirewallRule -DisplayName "{prefix}_BLOCK_ALL_OUT" -Direction Outbound -Action Block | Out-Null
+      New-NetFirewallRule -DisplayName "{prefix}_ALLOW_DNS" -Direction Outbound -Action Allow -Protocol UDP -RemotePort 53 | Out-Null
+      New-NetFirewallRule -DisplayName "{prefix}_ALLOW_DNS_TCP" -Direction Outbound -Action Allow -Protocol TCP -RemotePort 53 | Out-Null
+      "OK"
+    }} catch {{
+      "ERROR"
+    }}
+    """
+    code, out, err = run_powershell(ps, timeout=18)
+    return {"ok": code == 0 and "OK" in out, "rule_prefix": prefix, "stdout": out, "stderr": err}
+
+
+def firewall_remove_rules(prefix: str) -> Dict[str, Any]:
+    """
+    Reliability tool: rollback containment rules.
+    """
+    ps = rf"""
+    try {{
+      Get-NetFirewallRule | Where-Object {{$_.DisplayName -like "{prefix}*"}} | Remove-NetFirewallRule
+      "OK"
+    }} catch {{
+      "ERROR"
+    }}
+    """
+    code, out, err = run_powershell(ps, timeout=18)
+    return {"ok": code == 0 and "OK" in out, "stdout": out, "stderr": err}
+
+
+# ============================================================
+# SOC Report Generator (Standards + Evidence)
+# ============================================================
+
+def extract_iocs(report: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Extracts IPs/domains/paths for SOC workflows.
+    """
+    ips = set()
+    paths = set()
+
+    evidence = report.get("evidence") or {}
+    conns = evidence.get("external_connections") or []
+    procs = evidence.get("process_inventory_sample") or []
+
+    for c in conns:
+        if isinstance(c, dict):
+            ip = c.get("remote_ip")
+            if ip:
+                ips.add(str(ip))
+            exe = c.get("exe")
+            if exe:
+                paths.add(str(exe))
+
+    for p in procs:
+        if isinstance(p, dict):
+            exe = p.get("exe")
+            if exe:
+                paths.add(str(exe))
+
+    return {
+        "remote_ips": sorted(list(ips))[:500],
+        "exe_paths": sorted(list(paths))[:500],
+    }
+
+
+def build_soc_report(minutes: int = 60) -> Dict[str, Any]:
+    """
+    Produces a SOC-style report:
+    - Evidence collected
+    - Alerts
+    - Severity score
+    - MITRE mapping
+    - Recommended actions
+    """
+    global LAST_ALERTS, LAST_REPORT
+
+    report_id = str(uuid.uuid4())
+
+    processes = get_running_process_inventory(limit=350)
+    conns = get_external_connections(limit=350)
+    ports = get_listening_ports(limit=350)
+    logs = collect_recent_eventlogs(minutes=minutes)
+
+    def_status = defender_status()
+    def_exclusions = get_defender_exclusions()
+    persistence = get_startup_persistence()
+    tasks = get_scheduled_tasks_inventory(limit=250)
+    services = get_services_inventory(limit=250)
+    admins = get_local_admins()
+    hosts = get_hosts_file_status()
+    dns_cache = get_dns_cache(limit=250)
+
+    sec_events: List[Dict[str, Any]] = []
+    if isinstance(logs.get("events", {}).get("Security"), list):
+        sec_events = logs["events"]["Security"]
+
+    alerts: List[Dict[str, Any]] = []
+    alerts.extend(detect_suspicious_processes(processes))
+    alerts.extend(detect_suspicious_external_connections(conns))
+
+    bf = detect_bruteforce_from_security_events(sec_events)
+    if bf:
+        alerts.append(bf)
+
+    alerts.extend(detect_service_install(sec_events))
+    alerts.extend(detect_scheduled_task_changes(sec_events))
+    alerts.extend(detect_exposed_listening_ports(ports))
+
+    for a in alerts:
+        if "mitre" not in a:
+            a["mitre"] = mitre_guess(a)
+
+    max_lvl = "info"
+    max_score = 0
+    for a in alerts:
+        lvl = clamp_severity(a.get("severity", "medium"))
+        score = severity_score(lvl)
+        if score > max_score:
+            max_score = score
+            max_lvl = lvl
+
+    recs = [
+        "If suspicious connections exist, block remote IPs using fw_block_ip().",
+        "If brute force suspected, review logon sources and enforce stronger auth.",
+        "If service installs detected, verify service binary path and publisher.",
+        "Audit persistence (Run keys + Startup folders) and remove unknown entries.",
+        "Review Defender exclusions; malicious actors often add exclusions.",
+        "Run defender_update() then defender_scan_quick().",
+        "If critical, apply containment via fw_lockdown_mode().",
+        "Deploy Sysmon for higher-fidelity evidence and timeline reconstruction.",
+    ]
+
+    report = {
+        "report_id": report_id,
+        "generated_utc": utc_now_iso(),
+        "agent": {
+            "name": "NetProbe MCP - Security Agent",
+            "admin": is_admin(),
+            "host": os.environ.get("COMPUTERNAME") or "unknown",
+        },
+        "window_minutes": minutes,
+        "evidence": {
+            "external_connections": conns[:200],
+            "listening_ports": ports[:200],
+            "process_inventory_sample": processes[:200],
+            "eventlogs": logs,
+            "defender_status": def_status,
+            "defender_exclusions": def_exclusions,
+            "persistence": persistence,
+            "scheduled_tasks_inventory": tasks,
+            "services_inventory": services,
+            "local_admins": admins,
+            "hosts_file": hosts,
+            "dns_cache": dns_cache,
+        },
+        "alerts": alerts,
+        "soc_assessment": {
+            "alert_count": len(alerts),
+            "max_severity": max_lvl,
+            "max_severity_score": max_score,
+            "confidence": "medium",
+            "note": "Heuristic detection. Use Sysmon for higher fidelity evidence.",
+        },
+        "recommended_actions": recs,
+        "standards": {
+            "mitre_attack": True,
+            "nist_style": True,
+            "soc_reporting": True,
+            "chain_of_custody_ready": True,
+        },
+    }
+
+    report["iocs"] = extract_iocs(report)
+
+    LAST_ALERTS = alerts
+    LAST_REPORT = report
+    return report
+
+
+# ============================================================
+# Recording Engine (Security-Only)
 # ============================================================
 
 class RecorderSession:
@@ -430,12 +1260,14 @@ class RecorderSession:
         interval_seconds: int,
         mode: RecordingMode,
         output_dir: Path,
+        minutes_window: int = 30,
     ) -> None:
         self.session_id = session_id
         self.profile = profile
-        self.interval_seconds = max(1, int(interval_seconds))
+        self.interval_seconds = max(2, int(interval_seconds))
         self.mode = mode
         self.output_dir = output_dir
+        self.minutes_window = max(1, min(minutes_window, 1440))
 
         self.started_utc: ISO8601 = utc_now_iso()
         self.stopped_utc: Optional[ISO8601] = None
@@ -465,19 +1297,19 @@ class RecorderSession:
     def _run_loop(self) -> None:
         while not self._stop_event.is_set():
             try:
-                snapshot = build_snapshot(profile=self.profile, limit=50)
-                self._save_snapshot(snapshot)
+                report = build_soc_report(minutes=self.minutes_window)
+                self._save_report(report)
                 self.snapshot_count += 1
             except Exception:
                 pass
-
             time.sleep(self.interval_seconds)
 
-    def _save_snapshot(self, snapshot: SystemSnapshot) -> None:
-        path = self.output_dir / f"{snapshot.timestamp_utc.replace(':', '-')}_{snapshot.snapshot_id}.json"
+    def _save_report(self, report: Dict[str, Any]) -> None:
+        safe_ts = utc_now_iso().replace(":", "-")
+        path = self.output_dir / f"{safe_ts}_{report.get('report_id')}.json"
         try:
             with open(path, "w", encoding="utf-8") as f:
-                json.dump(asdict(snapshot), f, indent=2)
+                json.dump(report, f, indent=2)
         except Exception:
             pass
 
@@ -496,375 +1328,293 @@ class RecorderSession:
 
 
 # ============================================================
-# MCP Tools (Claude can call these)
+# MCP Tools (Azure Foundry Style Outputs)
 # ============================================================
 
 @mcp.tool()
-def hello(name: str = "World") -> Dict[str, Any]:
+def security_triage_snapshot(minutes: int = 30) -> Dict[str, Any]:
     """
-    Sanity test tool.
-    """
-    return {
-        "meta": asdict(
-            ToolMeta(
-                tool="hello",
-                success=True,
-                timestamp_utc=utc_now_iso(),
-                message="Hello tool executed successfully.",
-            )
-        ),
-        "data": {"greeting": f"Timestamp : {utc_now_iso()} - Hello, {name}!"},
-    }
-
-
-@mcp.tool()
-def system_snapshot(profile: RecordingProfile = "basic", limit: int = 30) -> Dict[str, Any]:
-    """
-    Takes ONE snapshot instantly.
-    Useful for testing and quick analysis.
+    Main security snapshot tool.
+    Returns SOC-grade evidence and alert list.
     """
     try:
-        snap = build_snapshot(profile=profile, limit=limit)
+        minutes = max(1, min(minutes, 1440))
+        report = build_soc_report(minutes=minutes)
         return {
             "meta": asdict(
                 ToolMeta(
-                    tool="system_snapshot",
+                    tool="security_triage_snapshot",
                     success=True,
                     timestamp_utc=utc_now_iso(),
-                    message="Snapshot collected successfully.",
-                )
-            ),
-            "data": asdict(snap),
-        }
-    except Exception as e:
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="system_snapshot",
-                    success=False,
-                    timestamp_utc=utc_now_iso(),
-                    message="Snapshot failed.",
-                )
-            ),
-            "error": {"error_type": type(e).__name__, "error_message": str(e)},
-        }
-
-
-@mcp.tool()
-def start_recording(
-    profile: RecordingProfile = "security",
-    interval_seconds: int = 5,
-    mode: RecordingMode = "background",
-) -> Dict[str, Any]:
-    """
-    Starts a background recorder session.
-    Saves snapshots to disk until stopped.
-    """
-    try:
-        session_id = str(uuid.uuid4())
-        output_dir = DATA_DIR / session_id
-
-        session = RecorderSession(
-            session_id=session_id,
-            profile=profile,
-            interval_seconds=interval_seconds,
-            mode=mode,
-            output_dir=output_dir,
-        )
-
-        with _sessions_lock:
-            _sessions[session_id] = session
-
-        session.start()
-
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="start_recording",
-                    success=True,
-                    timestamp_utc=utc_now_iso(),
-                    message="Recording started successfully.",
-                )
-            ),
-            "data": asdict(session.info()),
-        }
-
-    except Exception as e:
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="start_recording",
-                    success=False,
-                    timestamp_utc=utc_now_iso(),
-                    message="Failed to start recording.",
-                )
-            ),
-            "error": {"error_type": type(e).__name__, "error_message": str(e)},
-        }
-
-
-@mcp.tool()
-def stop_recording(session_id: str) -> Dict[str, Any]:
-    """
-    Stops a running recording session.
-    """
-    try:
-        with _sessions_lock:
-            session = _sessions.get(session_id)
-
-        if not session:
-            return {
-                "meta": asdict(
-                    ToolMeta(
-                        tool="stop_recording",
-                        success=False,
-                        timestamp_utc=utc_now_iso(),
-                        message="Session not found.",
-                    )
-                ),
-                "error": {"error_type": "NotFound", "error_message": f"Session {session_id} not found."},
-            }
-
-        session.stop()
-
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="stop_recording",
-                    success=True,
-                    timestamp_utc=utc_now_iso(),
-                    message="Recording stopped successfully.",
-                )
-            ),
-            "data": asdict(session.info()),
-        }
-
-    except Exception as e:
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="stop_recording",
-                    success=False,
-                    timestamp_utc=utc_now_iso(),
-                    message="Failed to stop recording.",
-                )
-            ),
-            "error": {"error_type": type(e).__name__, "error_message": str(e)},
-        }
-
-
-@mcp.tool()
-def list_recordings() -> Dict[str, Any]:
-    """
-    Lists all known sessions (running + stopped) in memory.
-    """
-    try:
-        with _sessions_lock:
-            sessions = list(_sessions.values())
-
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="list_recordings",
-                    success=True,
-                    timestamp_utc=utc_now_iso(),
-                    message="Sessions listed successfully.",
-                )
-            ),
-            "data": {
-                "sessions": [asdict(s.info()) for s in sessions],
-                "count": len(sessions),
-            },
-        }
-
-    except Exception as e:
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="list_recordings",
-                    success=False,
-                    timestamp_utc=utc_now_iso(),
-                    message="Failed to list sessions.",
-                )
-            ),
-            "error": {"error_type": type(e).__name__, "error_message": str(e)},
-        }
-
-
-@mcp.tool()
-def read_session_snapshots(session_id: str, limit: int = 20) -> Dict[str, Any]:
-    """
-    Reads snapshots saved on disk for a session.
-    Useful for "incident replay".
-    """
-    try:
-        session_dir = DATA_DIR / session_id
-        if not session_dir.exists():
-            return {
-                "meta": asdict(
-                    ToolMeta(
-                        tool="read_session_snapshots",
-                        success=False,
-                        timestamp_utc=utc_now_iso(),
-                        message="Session directory not found on disk.",
-                    )
-                ),
-                "error": {"error_type": "NotFound", "error_message": f"No folder found for {session_id}"},
-            }
-
-        files = sorted(session_dir.glob("*.json"))
-        files = files[: max(1, limit)]
-
-        snapshots: List[Dict[str, Any]] = []
-        for f in files:
-            try:
-                with open(f, "r", encoding="utf-8") as fp:
-                    snapshots.append(json.load(fp))
-            except Exception:
-                continue
-
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="read_session_snapshots",
-                    success=True,
-                    timestamp_utc=utc_now_iso(),
-                    message="Snapshots read successfully.",
-                )
-            ),
-            "data": {
-                "session_id": session_id,
-                "snapshot_files_read": len(snapshots),
-                "snapshots": snapshots,
-            },
-        }
-
-    except Exception as e:
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="read_session_snapshots",
-                    success=False,
-                    timestamp_utc=utc_now_iso(),
-                    message="Failed to read snapshots.",
-                )
-            ),
-            "error": {"error_type": type(e).__name__, "error_message": str(e)},
-        }
-
-
-@mcp.tool()
-def generate_executive_report(session_id: str) -> Dict[str, Any]:
-    """
-    Generates a simple executive report from saved snapshots.
-    Transparent + evidence-based.
-    """
-    try:
-        session_dir = DATA_DIR / session_id
-        if not session_dir.exists():
-            return {
-                "meta": asdict(
-                    ToolMeta(
-                        tool="generate_executive_report",
-                        success=False,
-                        timestamp_utc=utc_now_iso(),
-                        message="Session directory not found.",
-                    )
-                ),
-                "error": {"error_type": "NotFound", "error_message": f"No session folder for {session_id}"},
-            }
-
-        files = sorted(session_dir.glob("*.json"))
-        if not files:
-            return {
-                "meta": asdict(
-                    ToolMeta(
-                        tool="generate_executive_report",
-                        success=False,
-                        timestamp_utc=utc_now_iso(),
-                        message="No snapshots found to analyze.",
-                    )
-                ),
-                "error": {"error_type": "EmptySession", "error_message": "No snapshots found."},
-            }
-
-        cpu_values: List[float] = []
-        ram_values: List[float] = []
-        all_alerts: List[str] = []
-        total_ports_exposed = 0
-
-        for f in files:
-            try:
-                with open(f, "r", encoding="utf-8") as fp:
-                    snap = json.load(fp)
-
-                cpu = snap.get("cpu_percent")
-                ram = snap.get("ram_percent")
-                alerts = snap.get("alerts") or []
-                ports = snap.get("listening_ports") or []
-
-                if isinstance(cpu, (int, float)):
-                    cpu_values.append(float(cpu))
-                if isinstance(ram, (int, float)):
-                    ram_values.append(float(ram))
-
-                for a in alerts:
-                    if isinstance(a, str):
-                        all_alerts.append(a)
-
-                for p in ports:
-                    if isinstance(p, dict) and p.get("local_ip") in ("0.0.0.0", "::"):
-                        total_ports_exposed += 1
-
-            except Exception:
-                continue
-
-        def safe_avg(nums: List[float]) -> Optional[float]:
-            if not nums:
-                return None
-            return sum(nums) / len(nums)
-
-        report = {
-            "session_id": session_id,
-            "snapshot_count": len(files),
-            "cpu_avg": safe_avg(cpu_values),
-            "cpu_max": max(cpu_values) if cpu_values else None,
-            "ram_avg": safe_avg(ram_values),
-            "ram_max": max(ram_values) if ram_values else None,
-            "alert_count": len(all_alerts),
-            "alerts_sample": all_alerts[:25],
-            "ports_exposed_count": total_ports_exposed,
-            "recommendations": [
-                "Review exposed ports bound to 0.0.0.0 / ::",
-                "Investigate spikes in CPU/RAM if present",
-                "Use a longer recording interval for day-long monitoring (e.g., 30s)",
-                "Export session to JSON for deeper analysis",
-            ],
-        }
-
-        return {
-            "meta": asdict(
-                ToolMeta(
-                    tool="generate_executive_report",
-                    success=True,
-                    timestamp_utc=utc_now_iso(),
-                    message="Executive report generated successfully.",
+                    message="SOC snapshot generated successfully.",
                 )
             ),
             "data": report,
         }
-
     except Exception as e:
         return {
             "meta": asdict(
                 ToolMeta(
-                    tool="generate_executive_report",
+                    tool="security_triage_snapshot",
                     success=False,
                     timestamp_utc=utc_now_iso(),
-                    message="Failed to generate report.",
+                    message="SOC snapshot failed.",
                 )
             ),
-            "error": {"error_type": type(e).__name__, "error_message": str(e)},
+            "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
+        }
+
+
+@mcp.tool()
+def persistence_scan() -> Dict[str, Any]:
+    """
+    Run keys + Startup folder evidence.
+    """
+    try:
+        data = get_startup_persistence()
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="persistence_scan",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Persistence scan completed.",
+                )
+            ),
+            "data": data,
+        }
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="persistence_scan",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Persistence scan failed.",
+                )
+            ),
+            "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
+        }
+
+
+@mcp.tool()
+def scheduled_tasks_inventory(limit: int = 250) -> Dict[str, Any]:
+    try:
+        data = get_scheduled_tasks_inventory(limit=limit)
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="scheduled_tasks_inventory",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Scheduled tasks collected.",
+                )
+            ),
+            "data": data,
+        }
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="scheduled_tasks_inventory",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Failed to collect scheduled tasks.",
+                )
+            ),
+            "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
+        }
+
+
+@mcp.tool()
+def services_inventory(limit: int = 250) -> Dict[str, Any]:
+    try:
+        data = get_services_inventory(limit=limit)
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="services_inventory",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Services collected.",
+                )
+            ),
+            "data": data,
+        }
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="services_inventory",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Failed to collect services.",
+                )
+            ),
+            "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
+        }
+
+
+@mcp.tool()
+def defender_get_exclusions() -> Dict[str, Any]:
+    try:
+        data = get_defender_exclusions()
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="defender_get_exclusions",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Defender exclusions fetched.",
+                )
+            ),
+            "data": data,
+        }
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="defender_get_exclusions",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Failed to fetch exclusions.",
+                )
+            ),
+            "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
+        }
+
+
+@mcp.tool()
+def hosts_file_check() -> Dict[str, Any]:
+    try:
+        data = get_hosts_file_status()
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="hosts_file_check",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Hosts file checked.",
+                )
+            ),
+            "data": data,
+        }
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="hosts_file_check",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Hosts file check failed.",
+                )
+            ),
+            "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
+        }
+
+
+@mcp.tool()
+def dns_cache_dump(limit: int = 200) -> Dict[str, Any]:
+    try:
+        data = get_dns_cache(limit=limit)
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="dns_cache_dump",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="DNS cache fetched.",
+                )
+            ),
+            "data": data,
+        }
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="dns_cache_dump",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="DNS cache fetch failed.",
+                )
+            ),
+            "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
+        }
+
+
+@mcp.tool()
+def list_local_admins() -> Dict[str, Any]:
+    try:
+        data = get_local_admins()
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="list_local_admins",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Local admins fetched.",
+                )
+            ),
+            "data": data,
+        }
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="list_local_admins",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Failed to fetch local admins.",
+                )
+            ),
+            "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
+        }
+
+
+@mcp.tool()
+def fw_remove_rules(prefix: str) -> Dict[str, Any]:
+    """
+    Rollback firewall rules created by lockdown/block tools.
+    Requires admin.
+    """
+    try:
+        prefix = prefix.strip()
+        if not prefix:
+            return {
+                "meta": asdict(
+                    ToolMeta(
+                        tool="fw_remove_rules",
+                        success=False,
+                        timestamp_utc=utc_now_iso(),
+                        message="Prefix required.",
+                    )
+                ),
+                "error": asdict(ErrorInfo(error_type="ValidationError", error_message="prefix is required")),
+            }
+
+        result = firewall_remove_rules(prefix)
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="fw_remove_rules",
+                    success=True,
+                    timestamp_utc=utc_now_iso(),
+                    message="Firewall rules removal executed.",
+                )
+            ),
+            "data": result,
+        }
+    except Exception as e:
+        return {
+            "meta": asdict(
+                ToolMeta(
+                    tool="fw_remove_rules",
+                    success=False,
+                    timestamp_utc=utc_now_iso(),
+                    message="Firewall rule removal failed.",
+                )
+            ),
+            "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
         }
 
 
@@ -873,6 +1623,4 @@ def generate_executive_report(session_id: str) -> Dict[str, Any]:
 # ============================================================
 
 if __name__ == "__main__":
-    # For Claude Desktop MCP: use stdio
-    # For local HTTP testing: use transport="http"
     mcp.run(transport="stdio")
