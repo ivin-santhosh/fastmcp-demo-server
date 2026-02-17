@@ -1,0 +1,3382 @@
+{
+  "snapshot_id": "4cd89a65-d12b-47cd-b24a-79619e574b84",
+  "timestamp_utc": "2026-02-17T08:41:45.867213+00:00",
+  "profile": "full_security",
+  "evidence": {
+    "external_connections": [
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 51866,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 62536,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 51391,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 52677,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 65461,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 59071,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 53097,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 52736,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 61286,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 59663,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 63751,
+        "remote_ip": "1.1.1.1",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 58375,
+        "remote_ip": "104.18.11.200",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 52502,
+        "remote_ip": "104.18.11.200",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 50960,
+        "remote_ip": "104.18.11.200",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 59988,
+        "remote_ip": "104.18.39.21",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 54636,
+        "remote_ip": "113.44.253.43",
+        "remote_port": 80,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21328,
+        "process": "Code.exe",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 60488,
+        "remote_ip": "13.107.246.58",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 63692,
+        "remote_ip": "142.250.4.188",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 55366,
+        "remote_ip": "142.251.10.188",
+        "remote_port": 5228,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 12040,
+        "process": "fcmcomm.exe",
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\FT\\fcmcomm.exe",
+        "username": null,
+        "local_ip": "192.168.1.12",
+        "local_port": 56981,
+        "remote_ip": "142.251.12.188",
+        "remote_port": 5228,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 6524,
+        "process": "AnyDesk.exe",
+        "exe": "C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe",
+        "username": null,
+        "local_ip": "192.168.1.12",
+        "local_port": 63302,
+        "remote_ip": "148.113.8.114",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 55866,
+        "remote_ip": "15.197.213.252",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 39856,
+        "process": "wpscloudsvr.exe",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Kingsoft\\WPS Office\\12.2.0.23196\\office6\\wpscloudsvr.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 52126,
+        "remote_ip": "15.207.59.110",
+        "remote_port": 443,
+        "status": "CLOSE_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 40528,
+        "process": "claude.exe",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 60635,
+        "remote_ip": "160.79.104.10",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 40528,
+        "process": "claude.exe",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 52042,
+        "remote_ip": "160.79.104.10",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 53316,
+        "remote_ip": "172.64.148.235",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 51271,
+        "remote_ip": "18.97.36.2",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 51814,
+        "remote_ip": "18.97.36.6",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 59923,
+        "remote_ip": "18.97.36.6",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 40528,
+        "process": "claude.exe",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 65166,
+        "remote_ip": "18.97.36.68",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 62505,
+        "remote_ip": "20.189.173.4",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 61275,
+        "remote_ip": "20.189.173.4",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 64294,
+        "remote_ip": "20.189.173.4",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 55918,
+        "remote_ip": "20.189.173.4",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 57715,
+        "remote_ip": "20.189.173.4",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 52709,
+        "remote_ip": "20.190.175.152",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 16276,
+        "process": "XboxPcAppFT.exe",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.GamingApp_2512.1001.36.0_x64__8wekyb3d8bbwe\\XboxPcAppFT.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 58377,
+        "remote_ip": "20.201.192.56",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 62147,
+        "remote_ip": "20.42.73.27",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 64151,
+        "remote_ip": "20.42.73.27",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 52748,
+        "remote_ip": "216.150.16.65",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 51013,
+        "remote_ip": "23.103.239.133",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 58404,
+        "remote_ip": "23.217.52.130",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 55073,
+        "remote_ip": "23.217.52.146",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 22724,
+        "process": "Widgets.exe",
+        "exe": "C:\\Program Files\\WindowsApps\\MicrosoftWindows.Client.WebExperience_526.1202.40.0_x64__cw5n1h2txyewy\\Dashboard\\Widgets.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 64152,
+        "remote_ip": "23.217.52.161",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 53441,
+        "remote_ip": "23.46.187.138",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 60407,
+        "remote_ip": "23.58.95.139",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 52616,
+        "remote_ip": "23.58.95.145",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 52773,
+        "remote_ip": "23.58.95.152",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 64463,
+        "remote_ip": "23.58.95.152",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 55911,
+        "remote_ip": "23.58.95.154",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 63362,
+        "remote_ip": "3.132.184.176",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 50970,
+        "remote_ip": "3.151.142.143",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 56388,
+        "remote_ip": "3.215.101.233",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 60696,
+        "remote_ip": "3.215.101.233",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 54055,
+        "remote_ip": "34.160.81.0",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 40528,
+        "process": "claude.exe",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 58205,
+        "remote_ip": "34.36.57.103",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 54635,
+        "remote_ip": "35.167.57.125",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 61185,
+        "remote_ip": "4.189.10.113",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 1256,
+        "process": "OneDrive.exe",
+        "exe": "C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 56982,
+        "remote_ip": "4.213.25.240",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 6844,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "192.168.1.12",
+        "local_port": 49424,
+        "remote_ip": "4.213.25.242",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 59439,
+        "remote_ip": "40.104.122.178",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 53269,
+        "remote_ip": "40.104.122.242",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 63709,
+        "remote_ip": "52.102.111.138",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 52735,
+        "remote_ip": "52.102.111.141",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 60081,
+        "remote_ip": "52.111.252.7",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 54997,
+        "remote_ip": "52.123.128.14",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 63212,
+        "remote_ip": "52.123.128.14",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 54640,
+        "remote_ip": "52.123.129.14",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 63494,
+        "remote_ip": "52.123.160.116",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 19348,
+        "process": "ms-teams.exe",
+        "exe": "C:\\Program Files\\WindowsApps\\MSTeams_26015.1706.4351.4392_x64__8wekyb3d8bbwe\\ms-teams.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 57282,
+        "remote_ip": "52.123.168.146",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 21492,
+        "process": "msedgewebview2.exe",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\144.0.3719.115\\msedgewebview2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 55395,
+        "remote_ip": "52.123.170.163",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 50872,
+        "remote_ip": "52.168.112.67",
+        "remote_port": 443,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 61186,
+        "remote_ip": "52.168.117.174",
+        "remote_port": 443,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 15492,
+        "process": "chrome.exe",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "192.168.1.12",
+        "local_port": 64255,
+        "remote_ip": "76.223.31.44",
+        "remote_port": 443,
+        "status": "ESTABLISHED",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 49669,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 64948,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 62251,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 49937,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 49936,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 61764,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 56874,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 57610,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 55598,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 53680,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 52001,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      },
+      {
+        "pid": 0,
+        "process": "System Idle Process",
+        "exe": null,
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 58866,
+        "remote_ip": "8.8.8.8",
+        "remote_port": 53,
+        "status": "TIME_WAIT",
+        "protocol": "TCP"
+      }
+    ],
+    "listening_ports": [
+      {
+        "pid": 1904,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 135
+      },
+      {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "0.0.0.0",
+        "local_port": 445
+      },
+      {
+        "pid": 15104,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 5040
+      },
+      {
+        "pid": 6524,
+        "process": "AnyDesk.exe",
+        "exe": "C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 7070
+      },
+      {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "0.0.0.0",
+        "local_port": 9095
+      },
+      {
+        "pid": 1620,
+        "process": "lsass.exe",
+        "exe": "C:\\Windows\\System32\\lsass.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49664
+      },
+      {
+        "pid": 1384,
+        "process": "wininit.exe",
+        "exe": "C:\\Windows\\System32\\wininit.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49665
+      },
+      {
+        "pid": 2240,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49666
+      },
+      {
+        "pid": 3612,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49667
+      },
+      {
+        "pid": 6240,
+        "process": "spoolsv.exe",
+        "exe": "C:\\Windows\\System32\\spoolsv.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49668
+      },
+      {
+        "pid": 1592,
+        "process": "services.exe",
+        "exe": "C:\\Windows\\System32\\services.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49735
+      },
+      {
+        "pid": 304,
+        "process": "Code.exe",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "127.0.0.1",
+        "local_port": 5117
+      },
+      {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "127.0.0.1",
+        "local_port": 9093
+      },
+      {
+        "pid": 6584,
+        "process": "emlproxy.exe",
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\emlproxy.exe",
+        "username": null,
+        "local_ip": "127.0.0.1",
+        "local_port": 17400
+      },
+      {
+        "pid": 13992,
+        "process": "Code.exe",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "127.0.0.1",
+        "local_port": 53589
+      },
+      {
+        "pid": 13992,
+        "process": "Code.exe",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "127.0.0.1",
+        "local_port": 54870
+      },
+      {
+        "pid": 13992,
+        "process": "Code.exe",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "127.0.0.1",
+        "local_port": 57072
+      },
+      {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "172.16.0.1",
+        "local_port": 139
+      },
+      {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "192.168.1.12",
+        "local_port": 139
+      },
+      {
+        "pid": 1904,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 135
+      },
+      {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "::",
+        "local_port": 445
+      },
+      {
+        "pid": 6524,
+        "process": "AnyDesk.exe",
+        "exe": "C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 7070
+      },
+      {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "::",
+        "local_port": 9095
+      },
+      {
+        "pid": 1620,
+        "process": "lsass.exe",
+        "exe": "C:\\Windows\\System32\\lsass.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49664
+      },
+      {
+        "pid": 1384,
+        "process": "wininit.exe",
+        "exe": "C:\\Windows\\System32\\wininit.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49665
+      },
+      {
+        "pid": 2240,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49666
+      },
+      {
+        "pid": 3612,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49667
+      },
+      {
+        "pid": 6240,
+        "process": "spoolsv.exe",
+        "exe": "C:\\Windows\\System32\\spoolsv.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49668
+      },
+      {
+        "pid": 1592,
+        "process": "services.exe",
+        "exe": "C:\\Windows\\System32\\services.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49735
+      },
+      {
+        "pid": 5792,
+        "process": "OneDrive.Sync.Service.exe",
+        "exe": "C:\\Program Files\\Microsoft OneDrive\\26.017.0126.0002\\OneDrive.Sync.Service.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "local_ip": "::1",
+        "local_port": 42050
+      }
+    ],
+    "process_inventory_sample": [
+      {
+        "pid": 236,
+        "ppid": 4,
+        "name": "",
+        "username": null,
+        "exe": "",
+        "cmdline": null
+      },
+      {
+        "pid": 10816,
+        "ppid": 27084,
+        "name": "AMDGameConfigServ.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\AMDGameConfigServ.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\AMDGameConfigServ.exe"
+      },
+      {
+        "pid": 18672,
+        "ppid": 19964,
+        "name": "AMDRSServ.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\AMDRSServ.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\AMDRSServ.exe"
+      },
+      {
+        "pid": 31860,
+        "ppid": 18672,
+        "name": "AMDRSSrcExt.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\AMDRSSrcExt.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\AMDRSSrcExt.exe fb28e830-7c29-4591-b2df-4e16275fa0d9 SOFTWARE\\AMD\\DVR\\Overlays"
+      },
+      {
+        "pid": 11712,
+        "ppid": 6556,
+        "name": "AggregatorHost.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\AggregatorHost.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 6524,
+        "ppid": 1592,
+        "name": "AnyDesk.exe",
+        "username": null,
+        "exe": "C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe",
+        "cmdline": "C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe --service"
+      },
+      {
+        "pid": 3648,
+        "ppid": 1764,
+        "name": "AppActions.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\AppActions.exe",
+        "cmdline": "C:\\WINDOWS\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\AppActions.exe -Embedding"
+      },
+      {
+        "pid": 4968,
+        "ppid": 1592,
+        "name": "AppHelperCap.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\hpcustomcapcomp.inf_amd64_9112ff0b96dede5a\\x64\\AppHelperCap.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 4316,
+        "ppid": 1764,
+        "name": "ApplicationFrameHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\ApplicationFrameHost.exe",
+        "cmdline": "C:\\WINDOWS\\system32\\ApplicationFrameHost.exe -Embedding"
+      },
+      {
+        "pid": 304,
+        "ppid": 13992,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe c:\\Users\\ivsan\\.vscode\\extensions\\ms-python.vscode-pylance-2025.10.4\\dist\\server.bundle.js --cancellationReceive=file:3166847b0369059d9b61633c8ed9cdcaf1d68d7170 --node-ipc --clientProcessId=13992"
+      },
+      {
+        "pid": 3424,
+        "ppid": 4636,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+      },
+      {
+        "pid": 4536,
+        "ppid": 13992,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe c:\\Users\\ivsan\\.vscode\\extensions\\visualstudioexptteam.intellicode-api-usage-examples-0.2.9\\dist\\server\\server.js --node-ipc --clientProcessId=13992"
+      },
+      {
+        "pid": 6676,
+        "ppid": 3424,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1776,i,10043155857517608169,15453323293111507352,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708993808206286 --mojo-platform-channel-handle=4548 /prefetch:14"
+      },
+      {
+        "pid": 13992,
+        "ppid": 3424,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --dns-result-order=ipv4first --experimental-network-inspection --inspect-port=0 --video-capture-use-gpu-memory-buffer --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1776,i,10043155857517608169,15453323293111507352,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708991934122588 --mojo-platform-channel-handle=4068 /prefetch:14"
+      },
+      {
+        "pid": 21328,
+        "ppid": 3424,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1776,i,10043155857517608169,15453323293111507352,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=1936 /prefetch:11"
+      },
+      {
+        "pid": 22916,
+        "ppid": 3424,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe --type=gpu-process --disable-skia-graphite --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Code --gpu-preferences=SAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAAQAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAAAAAAAAABAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --field-trial-handle=1776,i,10043155857517608169,15453323293111507352,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=1760 /prefetch:2"
+      },
+      {
+        "pid": 23632,
+        "ppid": 3424,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1776,i,10043155857517608169,15453323293111507352,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708990997080739 --mojo-platform-channel-handle=4424 /prefetch:14"
+      },
+      {
+        "pid": 32004,
+        "ppid": 3424,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe --type=crashpad-handler --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Code /prefetch:4 --no-rate-limit --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\ivsan\\AppData\\Roaming\\Code\\Crashpad --url=appcenter://code?aid=a4e3233c-699c-46ec-b4f4-9c2a77254662&uid=72fd268b-2db4-4d57-871b-ec84d3d7399e&iid=72fd268b-2db4-4d57-871b-ec84d3d7399e&sid=72fd268b-2db4-4d57-871b-ec84d3d7399e --annotation=_companyName=Microsoft --annotation=_productName=VSCode --annotation=_version=1.109.3 --annotation=plat=Win64 --annotation=prod=Electron --annotation=ver=39.3.0 --initial-client-data=0x4e8,0x4ec,0x4f0,0x4e4,0x4f4,0x7ff684b911ec,0x7ff684b911f8,0x7ff684b91208"
+      },
+      {
+        "pid": 35512,
+        "ppid": 3424,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1776,i,10043155857517608169,15453323293111507352,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708992871164437 --mojo-platform-channel-handle=4016 /prefetch:14"
+      },
+      {
+        "pid": 39220,
+        "ppid": 13992,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe c:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\b6a47e94e3\\resources\\app\\extensions\\json-language-features\\server\\dist\\node\\jsonServerMain --node-ipc --clientProcessId=13992"
+      },
+      {
+        "pid": 40320,
+        "ppid": 3424,
+        "name": "Code.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe --type=renderer --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --app-user-model-id=Microsoft.VisualStudioCode --app-path=C:\\Users\\ivsan\\AppData\\Local\\Programs\\Microsoft VS Code\\b6a47e94e3\\resources\\app --enable-sandbox --enable-blink-features=HighlightAPI --max-active-webgl-contexts=32 --disable-blink-features=FontMatchingCTMigration,StandardizedBrowserZoom, --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=4 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=47233296248 --field-trial-handle=1776,i,10043155857517608169,15453323293111507352,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=3540 --vscode-window-config=vscode:b19f1999-e5cf-4c3b-aa2b-d01771006ba9 /prefetch:1"
+      },
+      {
+        "pid": 32272,
+        "ppid": 3424,
+        "name": "CodeSetup-stable-c3a26841a84f20dfe0850d0a5a9bd01da4f003ea.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Temp\\vscode-stable-user-x64\\CodeSetup-stable-c3a26841a84f20dfe0850d0a5a9bd01da4f003ea.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Temp\\vscode-stable-user-x64\\CodeSetup-stable-c3a26841a84f20dfe0850d0a5a9bd01da4f003ea.exe /verysilent /log /update=C:\\Users\\ivsan\\AppData\\Local\\Temp\\vscode-stable-user-x64\\CodeSetup-stable-c3a26841a84f20dfe0850d0a5a9bd01da4f003ea.flag /sessionend=C:\\Users\\ivsan\\AppData\\Local\\Temp\\vscode-stable-user-x64\\session-ending.flag /nocloseapplications /mergetasks=runcode,!desktopicon,!quicklaunchicon"
+      },
+      {
+        "pid": 23516,
+        "ppid": 32272,
+        "name": "CodeSetup-stable-c3a26841a84f20dfe0850d0a5a9bd01da4f003ea.tmp",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Temp\\is-F6M1A.tmp\\CodeSetup-stable-c3a26841a84f20dfe0850d0a5a9bd01da4f003ea.tmp",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Temp\\is-F6M1A.tmp\\CodeSetup-stable-c3a26841a84f20dfe0850d0a5a9bd01da4f003ea.tmp /SL5=$80A04,124485872,841216,C:\\Users\\ivsan\\AppData\\Local\\Temp\\vscode-stable-user-x64\\CodeSetup-stable-c3a26841a84f20dfe0850d0a5a9bd01da4f003ea.exe /verysilent /log /update=C:\\Users\\ivsan\\AppData\\Local\\Temp\\vscode-stable-user-x64\\CodeSetup-stable-c3a26841a84f20dfe0850d0a5a9bd01da4f003ea.flag /sessionend=C:\\Users\\ivsan\\AppData\\Local\\Temp\\vscode-stable-user-x64\\session-ending.flag /nocloseapplications /mergetasks=runcode,!desktopicon,!quicklaunchicon"
+      },
+      {
+        "pid": 15432,
+        "ppid": 24520,
+        "name": "CrossDeviceResume.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\CrossDeviceResume.exe",
+        "cmdline": "C:\\WINDOWS\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\CrossDeviceResume.exe /tileid MicrosoftWindows.Client.CBS_cw5n1h2txyewy!CrossDeviceResumeApp"
+      },
+      {
+        "pid": 17128,
+        "ppid": 16208,
+        "name": "DesktopExtension.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\AD2F1837.myHP_52.52602.670.0_x64__v10z8vjag6ke6\\win32\\DesktopExtension.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\AD2F1837.myHP_52.52602.670.0_x64__v10z8vjag6ke6\\win32\\DesktopExtension.exe"
+      },
+      {
+        "pid": 4992,
+        "ppid": 1592,
+        "name": "DiagsCap.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\hpcustomcapcomp.inf_amd64_9112ff0b96dede5a\\x64\\DiagsCap.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 6592,
+        "ppid": 1592,
+        "name": "DtsApo4Service.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DTS\\PC\\APO4x\\DtsApo4Service.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 39712,
+        "ppid": 6568,
+        "name": "ETDCtrl.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\ETDCtrl.exe",
+        "cmdline": "C:\\WINDOWS\\system32\\ETDCtrl.exe"
+      },
+      {
+        "pid": 6568,
+        "ppid": 1592,
+        "name": "ETDService.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\ETDService.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 2392,
+        "ppid": 1764,
+        "name": "FileCoAuth.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Microsoft OneDrive\\26.017.0126.0002\\FileCoAuth.exe",
+        "cmdline": "C:\\Program Files\\Microsoft OneDrive\\26.017.0126.0002\\FileCoAuth.exe -Embedding"
+      },
+      {
+        "pid": 4048,
+        "ppid": 1592,
+        "name": "FileSyncHelper.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Microsoft OneDrive\\26.017.0126.0002\\FileSyncHelper.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 32496,
+        "ppid": 1592,
+        "name": "GooglePlayGamesServices.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Google\\Play Games Services\\26.2.324.0\\Service\\GooglePlayGamesServices.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 14516,
+        "ppid": 1764,
+        "name": "HP.HPX.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\AD2F1837.myHP_52.52602.670.0_x64__v10z8vjag6ke6\\HP.HPX.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\AD2F1837.myHP_52.52602.670.0_x64__v10z8vjag6ke6\\HP.HPX.exe -ServerName:App.AppX5efm30psr3e82pdwqzyp2w6y5e8xfjng.mca"
+      },
+      {
+        "pid": 26740,
+        "ppid": 29588,
+        "name": "HP.OMEN.VirtualCamHelper.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\AD2F1837.OMENCommandCenter_1101.2602.2.0_x64__v10z8vjag6ke6\\OmenCommandCenterApp\\HP.OMEN.VirtualCamHelper.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\AD2F1837.OMENCommandCenter_1101.2602.2.0_x64__v10z8vjag6ke6\\OmenCommandCenterApp\\HP.OMEN.VirtualCamHelper.exe"
+      },
+      {
+        "pid": 6656,
+        "ppid": 1592,
+        "name": "HPCommRecovery.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\HPCommRecovery\\HPCommRecovery.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 22196,
+        "ppid": 18020,
+        "name": "HPMediaNetwork.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\HP\\HP Media Network\\HPMediaNetwork.exe",
+        "cmdline": "C:\\Program Files\\HP\\HP Media Network\\HPMediaNetwork.exe"
+      },
+      {
+        "pid": 6668,
+        "ppid": 1592,
+        "name": "HPPrintScanDoctorService.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\HPPrintScanDoctor\\HPPrintScanDoctorService.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 4848,
+        "ppid": 25080,
+        "name": "HPSystemEventUtilityBackground.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\AD2F1837.HPSystemEventUtility_3.2.16.0_x64__v10z8vjag6ke6\\SystemEventUtility\\HPSystemEventUtilityBackground.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\AD2F1837.HPSystemEventUtility_3.2.16.0_x64__v10z8vjag6ke6\\SystemEventUtility\\HPSystemEventUtilityBackground.exe LaunchedByBgLauncher"
+      },
+      {
+        "pid": 26584,
+        "ppid": 4848,
+        "name": "HPSystemEventUtilityHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\AD2F1837.HPSystemEventUtility_3.2.16.0_x64__v10z8vjag6ke6\\SystemEventUtility\\HPSystemEventUtilityHost.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\AD2F1837.HPSystemEventUtility_3.2.16.0_x64__v10z8vjag6ke6\\SystemEventUtility\\HPSystemEventUtilityHost.exe"
+      },
+      {
+        "pid": 23704,
+        "ppid": 24520,
+        "name": "LightStudio-background.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\AD2F1837.OMENLightStudio_1.0.66.0_x64__v10z8vjag6ke6\\LightStudio-ui\\LightStudio-background.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\AD2F1837.OMENLightStudio_1.0.66.0_x64__v10z8vjag6ke6\\LightStudio-ui\\LightStudio-background.exe /InvokerPRAID: AD2F1837.OMENLightStudio"
+      },
+      {
+        "pid": 20456,
+        "ppid": 2240,
+        "name": "LightStudioHelper.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\HP\\LightStudioHelper\\LightStudioHelper.exe",
+        "cmdline": "C:\\Program Files\\HP\\LightStudioHelper\\LightStudioHelper.exe"
+      },
+      {
+        "pid": 3996,
+        "ppid": 1764,
+        "name": "LockApp.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\SystemApps\\Microsoft.LockApp_cw5n1h2txyewy\\LockApp.exe",
+        "cmdline": "C:\\Windows\\SystemApps\\Microsoft.LockApp_cw5n1h2txyewy\\LockApp.exe -ServerName:WindowsDefaultLockScreen.AppX7y4nbzq37zn4ks9k7amqjywdat7d3j2z.mca"
+      },
+      {
+        "pid": 1612,
+        "ppid": 1384,
+        "name": "LsaIso.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\LsaIso.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 4924,
+        "ppid": 24636,
+        "name": "M365Copilot.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.MicrosoftOfficeHub_19.2602.43201.0_x64__8wekyb3d8bbwe\\M365Copilot.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.MicrosoftOfficeHub_19.2602.43201.0_x64__8wekyb3d8bbwe\\M365Copilot.exe ms-getoffice: autostart reason=AutoStarter"
+      },
+      {
+        "pid": 4852,
+        "ppid": 4,
+        "name": "MemCompression",
+        "username": null,
+        "exe": "MemCompression",
+        "cmdline": null
+      },
+      {
+        "pid": 3456,
+        "ppid": 1592,
+        "name": "NVDisplay.Container.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nvhm.inf_amd64_3cb6b4743249e01c\\Display.NvContainer\\NVDisplay.Container.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 26528,
+        "ppid": 3456,
+        "name": "NVDisplay.Container.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nvhm.inf_amd64_3cb6b4743249e01c\\Display.NvContainer\\NVDisplay.Container.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 4984,
+        "ppid": 1592,
+        "name": "NetworkCap.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\hpcustomcapcomp.inf_amd64_9112ff0b96dede5a\\x64\\NetworkCap.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 5328,
+        "ppid": 6040,
+        "name": "NgcIso.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\NgcIso.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 26036,
+        "ppid": 4636,
+        "name": "Notepad.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2510.14.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2510.14.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe"
+      },
+      {
+        "pid": 22816,
+        "ppid": 4636,
+        "name": "ONENOTEM.EXE",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Microsoft Office\\root\\Office16\\ONENOTEM.EXE",
+        "cmdline": "C:\\Program Files\\Microsoft Office\\root\\Office16\\ONENOTEM.EXE /tsr"
+      },
+      {
+        "pid": 6836,
+        "ppid": 1592,
+        "name": "OfficeClickToRun.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Common Files\\microsoft shared\\ClickToRun\\OfficeClickToRun.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 3080,
+        "ppid": 1592,
+        "name": "OmenCap.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\hpomencustomcapcomp.inf_amd64_3c97e435117f8c16\\x64\\OmenCap\\OmenCap.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 29588,
+        "ppid": 26412,
+        "name": "OmenCommandCenterBackground.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\AD2F1837.OMENCommandCenter_1101.2602.2.0_x64__v10z8vjag6ke6\\OmenCommandCenterApp\\OmenCommandCenterBackground.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\AD2F1837.OMENCommandCenter_1101.2602.2.0_x64__v10z8vjag6ke6\\OmenCommandCenterApp\\OmenCommandCenterBackground.exe"
+      },
+      {
+        "pid": 23504,
+        "ppid": 2240,
+        "name": "OmenInstallMonitor.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\HP\\OmenInstallMonitor\\OmenInstallMonitor.exe",
+        "cmdline": "C:\\Program Files\\HP\\OmenInstallMonitor\\OmenInstallMonitor.exe"
+      },
+      {
+        "pid": 5792,
+        "ppid": 16676,
+        "name": "OneDrive.Sync.Service.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Microsoft OneDrive\\26.017.0126.0002\\OneDrive.Sync.Service.exe",
+        "cmdline": "C:\\Program Files\\Microsoft OneDrive\\26.017.0126.0002\\OneDrive.Sync.Service.exe"
+      },
+      {
+        "pid": 1256,
+        "ppid": 16676,
+        "name": "OneDrive.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe",
+        "cmdline": " /updateInstalled /background"
+      },
+      {
+        "pid": 4692,
+        "ppid": 33232,
+        "name": "OneDriveSetup.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Microsoft OneDrive\\Update\\OneDriveSetup.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 16676,
+        "ppid": 4692,
+        "name": "OneDriveSetup.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Microsoft OneDrive\\Update\\OneDriveSetup.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 15316,
+        "ppid": 2240,
+        "name": "OverlayHelper.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\HP\\Overlay\\OverlayHelper.exe",
+        "cmdline": "C:\\Program Files\\HP\\Overlay\\OverlayHelper.exe"
+      },
+      {
+        "pid": 2704,
+        "ppid": 18804,
+        "name": "PAD.AutomationServer.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.AutomationServer.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.AutomationServer.exe --ClientId=06da5a65-95f4-4829-b718-c54133ca9749 --CallerProcessId=18804 --ParentCorrelationId=78029b78-bee8-4513-8f0b-18858c4b53c2 --SessionId=da7ec250-4f17-41cc-a0d0-4348a8187bde"
+      },
+      {
+        "pid": 33440,
+        "ppid": 23772,
+        "name": "PAD.AutomationServer.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.AutomationServer.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.AutomationServer.exe --ClientId=e2848980-72b4-4773-b2d0-e590a660b17e --CallerProcessId=23772 --Environment=tip0 --EnvironmentName=380dfcf4-20c0-eeb6-aaef-fc9851e00ed0 --Geo=india --ParentCorrelationId=ec761ff0-27f2-4acc-aaf5-fd86e5d5fa41 --PrincipalOid=cc077a93-35f6-42ad-8758-503d37a9d296 --PrincipalPuid=1003200570EF421D --Region=centralindia --SessionId=da7ec250-4f17-41cc-a0d0-4348a8187bde --TenantId=24917450-fe15-4414-92ed-94fa8ec1b938"
+      },
+      {
+        "pid": 15116,
+        "ppid": 2704,
+        "name": "PAD.BridgeToUIAutomation2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BridgeToUIAutomation2.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BridgeToUIAutomation2.exe --guid=7479e591-a6d2-47a2-af4c-cd0ff2103b24 --callerProcessId=2704 --service=uia2"
+      },
+      {
+        "pid": 39348,
+        "ppid": 33440,
+        "name": "PAD.BridgeToUIAutomation2.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BridgeToUIAutomation2.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BridgeToUIAutomation2.exe --guid=11b27c0d-0a21-4e64-a342-f3d20878542a --callerProcessId=33440 --service=uia2"
+      },
+      {
+        "pid": 17684,
+        "ppid": 34388,
+        "name": "PAD.BrowserNativeMessageHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BrowserNativeMessageHost.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BrowserNativeMessageHost.exe chrome-extension://ljglajjnnkapghbckkcmodicjhacbfhk/ --parent-window=0"
+      },
+      {
+        "pid": 27244,
+        "ppid": 20320,
+        "name": "PAD.BrowserNativeMessageHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BrowserNativeMessageHost.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BrowserNativeMessageHost.exe chrome-extension://kagpabjoboikccfdghpdlaaopmgpgfdc/ --parent-window=0"
+      },
+      {
+        "pid": 18804,
+        "ppid": 24520,
+        "name": "PAD.Console.Host.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.Console.Host.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.Console.Host.exe"
+      },
+      {
+        "pid": 23772,
+        "ppid": 18804,
+        "name": "PAD.Designer.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.Designer.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.Designer.exe ms-powerautomate:/designer/flow/edit?CanCreateFlow=False&CanDeleteFlow=False&CanReadFlow=True&CanWriteFlow=True&CanCreateDesktopFlowModule=True&CanReadAnalysisOverride=True&CanReadDesktopFlowModule=True&CanWriteDesktopFlowModule=True&ClientSessionId=da7ec250-4f17-41cc-a0d0-4348a8187bde&CloudType=Public&CreateNew=True&CrmOrg=https%3A%2F%2Forg78712768.api.crm8.dynamics.com&DisableScreenshotCaptureOnError=False&EnvironmentCanUseBusinessAndItExceptionStatusesInUpdateWorkqueueItemAction=True&EnvironmentCloud=tip0&EnvironmentDegreeOfParallelismHint=4&EnvironmentDesktopFlowModuleSolutionIsValid=True&EnvironmentDesktopFlowModuleV2SolutionIsValid=True&EnvironmentSchemaV2RequiredBinariesEnabled=True&EnvironmentUIElementsCollectionSolutionIsValid=True&EnvironmentGeo=india&EnvironmentId=380dfcf4-20c0-eeb6-aaef-fc9851e00ed0&EnvironmentName=dev01&EnvironmentOwnerId=915760c2-51dd-f011-8406-6045bdcdf6ea&EnvironmentRegion=centralindia&EnvironmentSchemaV2SolutionIsValid=True&EnvironmentUsesVersionControl=True&EnvironmentIsDeleteAsUnpublishedOnFileAssociatedWithPublishableComponentEnabled=False&EnvironmentIsIncludeUnpublishedOnFileAssociatedMutationEnabled=False&EnvironmentUsesSchemaV2=True&FlowUsesNewSchema=True&HasTrialExpiredServicePlan=False&IsExample=False&IsFlowSigningEnabledInEnvironment=False&IsHiddenInstance=True&IsPayAsYouGoEnvironment=True&IsUserEligibleToViewGptActions=False&ParentCorrelationId=78029b78-bee8-4513-8f0b-18858c4b53c2&PrincipalOid=cc077a93-35f6-42ad-8758-503d37a9d296&PrincipalUid=1003200570EF421D&ProcessName=&ServicePlanStatus=Active&ServicePlanType=ProcessSimple&SolutionId&TenantId=24917450-fe15-4414-92ed-94fa8ec1b938&Upn=ivin.santhosh%40sysfore.com&UserDisplayName=Ivin+Santhosh&WorkflowId=00000000-0000-0000-0000-000000000000&ScriptType=Robin&RegisteredMachineId&MsalAuthenticationProvider=Wam&PostLaunchAction=None&MissingUiElementRepairType=Disabled&IsCredentialsSolutionValid=True&IsCustomErrorsSolutionValid=True&AppearanceType=Default&EnvironmentIsLockdownOfUnmanagedCustomizationEnabled=False&IsTestFlow=False&FlowToTest&EnvironmentType=NotSpecified&EnvironmentMetadataType=NotSpecified&EnvironmentVersion=9.2.26014.145&EnvironmentSku=Developer&OrgUri=https%3A%2F%2Forg78712768.crm8.dynamics.com%2F&CanReadComponentChangesetVersion=True&CanWriteComponentChangesetVersion=True"
+      },
+      {
+        "pid": 15308,
+        "ppid": 1764,
+        "name": "PushNotificationsLongRunningTask.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\MicrosoftCorporationII.WinAppRuntime.Singleton_8000.731.1532.0_x64__8wekyb3d8bbwe\\PushNotificationsLongRunningTask.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\MicrosoftCorporationII.WinAppRuntime.Singleton_8000.731.1532.0_x64__8wekyb3d8bbwe\\PushNotificationsLongRunningTask.exe -Embedding"
+      },
+      {
+        "pid": 27084,
+        "ppid": 21436,
+        "name": "RadeonSoftware.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\RadeonSoftware.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\RadeonSoftware.exe atlogon rebootstartup"
+      },
+      {
+        "pid": 280,
+        "ppid": 4,
+        "name": "Registry",
+        "username": null,
+        "exe": "Registry",
+        "cmdline": null
+      },
+      {
+        "pid": 1896,
+        "ppid": 4636,
+        "name": "RtkAudUService64.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\realtekservice.inf_amd64_9366beb5d0043df3\\RtkAudUService64.exe",
+        "cmdline": "C:\\Windows\\System32\\DriverStore\\FileRepository\\realtekservice.inf_amd64_9366beb5d0043df3\\RtkAudUService64.exe -background"
+      },
+      {
+        "pid": 6720,
+        "ppid": 1592,
+        "name": "RtkAudUService64.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\realtekservice.inf_amd64_9366beb5d0043df3\\RtkAudUService64.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 15468,
+        "ppid": 6720,
+        "name": "RtkAudUService64.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\realtekservice.inf_amd64_9366beb5d0043df3\\RtkAudUService64.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 2900,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 16076,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 17780,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 20868,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 21892,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 24776,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 27056,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 31188,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 33120,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 33444,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 34944,
+        "ppid": 1764,
+        "name": "RuntimeBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+      },
+      {
+        "pid": 20296,
+        "ppid": 1764,
+        "name": "SDXHelper.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Microsoft Office\\root\\Office16\\SDXHelper.exe",
+        "cmdline": "C:\\Program Files\\Microsoft Office\\Root\\Office16\\SDXHelper.exe -Embedding"
+      },
+      {
+        "pid": 14272,
+        "ppid": 1764,
+        "name": "SearchHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exe",
+        "cmdline": "C:\\WINDOWS\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exe -ServerName:CortanaUI.AppXstmwaab17q5s3y22tp6apqz7a45vwv65.mca"
+      },
+      {
+        "pid": 3964,
+        "ppid": 1592,
+        "name": "SearchIndexer.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\SearchIndexer.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 12712,
+        "ppid": 1592,
+        "name": "SecurityHealthService.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\SecurityHealthService.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 35068,
+        "ppid": 4636,
+        "name": "SecurityHealthSystray.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\SecurityHealthSystray.exe",
+        "cmdline": "C:\\Windows\\System32\\SecurityHealthSystray.exe"
+      },
+      {
+        "pid": 16452,
+        "ppid": 1764,
+        "name": "ShellExperienceHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\SystemApps\\ShellExperienceHost_cw5n1h2txyewy\\ShellExperienceHost.exe",
+        "cmdline": "C:\\WINDOWS\\SystemApps\\ShellExperienceHost_cw5n1h2txyewy\\ShellExperienceHost.exe -ServerName:App.AppXtk181tbxbce2qsex02s8tw7hfxa9xb3t.mca"
+      },
+      {
+        "pid": 38436,
+        "ppid": 24520,
+        "name": "ShellHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\ShellHost.exe",
+        "cmdline": "C:\\Windows\\System32\\ShellHost.exe"
+      },
+      {
+        "pid": 39440,
+        "ppid": 1764,
+        "name": "StartMenuExperienceHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe",
+        "cmdline": "C:\\Windows\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe -ServerName:FullTrustApp.AppXykjsye98af63ez2annt9djke8trg8stn.mca"
+      },
+      {
+        "pid": 4976,
+        "ppid": 1592,
+        "name": "SysInfoCap.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\hpcustomcapcomp.inf_amd64_9112ff0b96dede5a\\x64\\SysInfoCap.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 4,
+        "ppid": 0,
+        "name": "System",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "exe": "",
+        "cmdline": ""
+      },
+      {
+        "pid": 0,
+        "ppid": 0,
+        "name": "System Idle Process",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "exe": null,
+        "cmdline": ""
+      },
+      {
+        "pid": 39328,
+        "ppid": 2240,
+        "name": "SystemOptimizer.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\HP\\SystemOptimizer\\SystemOptimizer.exe",
+        "cmdline": "C:\\Program Files\\HP\\SystemOptimizer\\SystemOptimizer.exe"
+      },
+      {
+        "pid": 10304,
+        "ppid": 1764,
+        "name": "SystemSettings.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\ImmersiveControlPanel\\SystemSettings.exe",
+        "cmdline": "C:\\Windows\\ImmersiveControlPanel\\SystemSettings.exe -ServerName:microsoft.windows.immersivecontrolpanel"
+      },
+      {
+        "pid": 33192,
+        "ppid": 33172,
+        "name": "Taskmgr.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\Taskmgr.exe",
+        "cmdline": "C:\\WINDOWS\\system32\\taskmgr.exe /4"
+      },
+      {
+        "pid": 40632,
+        "ppid": 1764,
+        "name": "TextInputHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\TextInputHost.exe",
+        "cmdline": "C:\\WINDOWS\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\TextInputHost.exe -ServerName:InputApp.AppXk0k6mrh4r2q0ct33a9wgbez0x7v9cz5y.mca"
+      },
+      {
+        "pid": 4960,
+        "ppid": 1592,
+        "name": "TouchpointAnalyticsClientService.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\hpanalyticscomp.inf_amd64_ef460d1f2a35fc16\\x64\\TouchpointAnalyticsClientService.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 25484,
+        "ppid": 4960,
+        "name": "TouchpointGpuInfo.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\hpanalyticscomp.inf_amd64_ef460d1f2a35fc16\\x64\\TouchpointGpuInfo.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 22660,
+        "ppid": 1764,
+        "name": "UserOOBEBroker.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\oobe\\UserOOBEBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\oobe\\UserOOBEBroker.exe -Embedding"
+      },
+      {
+        "pid": 40156,
+        "ppid": 24520,
+        "name": "WhatsApp.Root.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\5319275A.WhatsAppDesktop_2.2605.103.0_x64__cv1g1gvanyjgm\\WhatsApp.Root.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\5319275A.WhatsAppDesktop_2.2605.103.0_x64__cv1g1gvanyjgm\\WhatsApp.Root.exe"
+      },
+      {
+        "pid": 15616,
+        "ppid": 1764,
+        "name": "WidgetService.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WidgetsPlatformRuntime_1.6.14.0_x64__8wekyb3d8bbwe\\WidgetService\\WidgetService.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.WidgetsPlatformRuntime_1.6.14.0_x64__8wekyb3d8bbwe\\WidgetService\\WidgetService.exe -RegisterProcessAsComServer -Embedding"
+      },
+      {
+        "pid": 22724,
+        "ppid": 1764,
+        "name": "Widgets.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\MicrosoftWindows.Client.WebExperience_526.1202.40.0_x64__cw5n1h2txyewy\\Dashboard\\Widgets.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\MicrosoftWindows.Client.WebExperience_526.1202.40.0_x64__cw5n1h2txyewy\\Dashboard\\Widgets.exe -ServerName:Microsoft.Windows.DashboardServer"
+      },
+      {
+        "pid": 37628,
+        "ppid": 1592,
+        "name": "WmiApSrv.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\wbem\\WmiApSrv.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 9032,
+        "ppid": 1764,
+        "name": "WmiPrvSE.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 10524,
+        "ppid": 1764,
+        "name": "WmiPrvSE.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 16276,
+        "ppid": 1764,
+        "name": "XboxPcAppFT.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.GamingApp_2512.1001.36.0_x64__8wekyb3d8bbwe\\XboxPcAppFT.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.GamingApp_2512.1001.36.0_x64__8wekyb3d8bbwe\\XboxPcAppFT.exe -Embedding"
+      },
+      {
+        "pid": 16220,
+        "ppid": 24520,
+        "name": "XboxPcTray.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.GamingApp_2512.1001.36.0_x64__8wekyb3d8bbwe\\XboxPcTray.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Microsoft.GamingApp_2512.1001.36.0_x64__8wekyb3d8bbwe\\XboxPcTray.exe startupLaunch"
+      },
+      {
+        "pid": 3596,
+        "ppid": 1592,
+        "name": "amdfendrsr.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\amdfendr.inf_amd64_987f8cede005f427\\amdfendrsr.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 9076,
+        "ppid": 18672,
+        "name": "amdow.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\amdow.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\amdow.exe 18672"
+      },
+      {
+        "pid": 6488,
+        "ppid": 1592,
+        "name": "amdpmfservice.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\amdpmfservice.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 2780,
+        "ppid": 1592,
+        "name": "arwsrvc.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\arwsrvc.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 7036,
+        "ppid": 3600,
+        "name": "atieclxx.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\u0405108.inf_amd64_503e66e8c3c22031\\B404968\\atieclxx.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 3600,
+        "ppid": 1592,
+        "name": "atiesrxx.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\DriverStore\\FileRepository\\u0405108.inf_amd64_503e66e8c3c22031\\B404968\\atiesrxx.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 41328,
+        "ppid": 5156,
+        "name": "audiodg.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\audiodg.exe",
+        "cmdline": "C:\\WINDOWS\\system32\\AUDIODG.EXE 0x00000000000005FC"
+      },
+      {
+        "pid": 5784,
+        "ppid": 1764,
+        "name": "backgroundTaskHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
+        "cmdline": "C:\\WINDOWS\\system32\\backgroundTaskHost.exe -ServerName:App.AppXe9cvj1thv1hmcw0cs98xm3r97tyzy2xs.mca"
+      },
+      {
+        "pid": 28888,
+        "ppid": 1764,
+        "name": "backgroundTaskHost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
+        "cmdline": "C:\\Windows\\system32\\backgroundTaskHost.exe -ServerName:App.AppXmtcan0h2tfbfy7k9kn8hbxb6dmzz1zh0.mca"
+      },
+      {
+        "pid": 6496,
+        "ppid": 1592,
+        "name": "bdssvc.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\bdssvc.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 36840,
+        "ppid": 29376,
+        "name": "browserhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\McAfee\\WebAdvisor\\browserhost.exe",
+        "cmdline": "C:\\Program Files\\McAfee\\WebAdvisor\\BrowserHost.exe chrome-extension://fheoggkfdfchfphceeifdbepaooicaho/ --parent-window=0"
+      },
+      {
+        "pid": 3556,
+        "ppid": 2824,
+        "name": "bssiss.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\bssiss.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 2968,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=28 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=47057218336 --metrics-shmem-handle=9516,i,16875171624081883154,5998055458697320364,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709012549043266 --mojo-platform-channel-handle=8532 /prefetch:1"
+      },
+      {
+        "pid": 4484,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --extension-process --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=459 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=58610879686 --metrics-shmem-handle=12620,i,396173432052433222,13224746224554872872,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709416414080185 --mojo-platform-channel-handle=8700 /prefetch:9"
+      },
+      {
+        "pid": 5556,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=365 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=53657228039 --metrics-shmem-handle=8560,i,17047695221695709459,13631631330350581166,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709328332146379 --mojo-platform-channel-handle=6896 /prefetch:1"
+      },
+      {
+        "pid": 5876,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=51 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=47664920335 --metrics-shmem-handle=7164,i,8519455976385822965,15474523792202470543,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709034101005793 --mojo-platform-channel-handle=7796 /prefetch:1"
+      },
+      {
+        "pid": 6068,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-GB --service-sandbox-type=service --metrics-shmem-handle=2316,i,6274359016770969213,8778606049245758610,524288 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=2308 /prefetch:13"
+      },
+      {
+        "pid": 11256,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=598 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=60806238645 --metrics-shmem-handle=12688,i,7882764750637963161,16090385864164650882,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709546662897196 --mojo-platform-channel-handle=12828 /prefetch:1"
+      },
+      {
+        "pid": 11432,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=crashpad-handler --user-data-dir=C:\\Users\\ivsan\\AppData\\Local\\Google\\Chrome\\User Data /prefetch:4 --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\ivsan\\AppData\\Local\\Google\\Chrome\\User Data\\Crashpad --metrics-dir=C:\\Users\\ivsan\\AppData\\Local\\Google\\Chrome\\User Data --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=plat=Win64 --annotation=prod=Chrome --annotation=ver=144.0.7559.133 --initial-client-data=0x11c,0x120,0x124,0xf8,0x128,0x7ffade690068,0x7ffade690074,0x7ffade690080"
+      },
+      {
+        "pid": 14172,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --extension-process --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=45 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=47663597167 --metrics-shmem-handle=4088,i,6178305479529556645,4217747023941662064,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709028478754699 --mojo-platform-channel-handle=9056 /prefetch:9"
+      },
+      {
+        "pid": 14464,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=627 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=61157318277 --metrics-shmem-handle=12924,i,8596836747278879208,17668687431128458039,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709573837110817 --mojo-platform-channel-handle=11368 /prefetch:1"
+      },
+      {
+        "pid": 15492,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-GB --service-sandbox-type=none --metrics-shmem-handle=2176,i,4328015358908168924,4681945092754228584,524288 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=2164 /prefetch:11"
+      },
+      {
+        "pid": 18284,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=515 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=59512874252 --metrics-shmem-handle=11152,i,9787094821873284135,2400265139417546557,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709468888423729 --mojo-platform-channel-handle=7732 /prefetch:1"
+      },
+      {
+        "pid": 22340,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=261 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=50841969127 --metrics-shmem-handle=8668,i,5176262509040158287,2894387448484508816,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709230879794083 --mojo-platform-channel-handle=8052 /prefetch:1"
+      },
+      {
+        "pid": 29716,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=utility --utility-sub-type=audio.mojom.AudioService --lang=en-GB --service-sandbox-type=audio --video-capture-use-gpu-memory-buffer --metrics-shmem-handle=7968,i,6218441830472808476,17623610671677562709,524288 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709333017355624 --mojo-platform-channel-handle=11916 /prefetch:12"
+      },
+      {
+        "pid": 30400,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=30 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=47061736482 --metrics-shmem-handle=9264,i,17843507851814189788,6849985338952869704,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709014423126964 --mojo-platform-channel-handle=7792 /prefetch:1"
+      },
+      {
+        "pid": 33832,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --extension-process --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=10 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=46935710208 --metrics-shmem-handle=6044,i,15477556940189120612,8749072125322124837,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190708995682289984 --mojo-platform-channel-handle=3012 /prefetch:9"
+      },
+      {
+        "pid": 35936,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=596 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=60806032145 --metrics-shmem-handle=7864,i,1699480389090045164,1446809322713897673,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709544788813498 --mojo-platform-channel-handle=8272 /prefetch:1"
+      },
+      {
+        "pid": 36824,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=gpu-process --gpu-preferences=SAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAAQAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAAAAAAAAABAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --metrics-shmem-handle=1796,i,11038204474065487706,2659489077578423231,262144 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=1928 /prefetch:2"
+      },
+      {
+        "pid": 38500,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=utility --utility-sub-type=video_capture.mojom.VideoCaptureService --lang=en-GB --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --metrics-shmem-handle=11484,i,9504899626835724559,15726040929551952568,524288 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709333954397473 --mojo-platform-channel-handle=11012 /prefetch:14"
+      },
+      {
+        "pid": 39080,
+        "ppid": 4636,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      {
+        "pid": 41032,
+        "ppid": 39080,
+        "name": "chrome.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --type=renderer --extension-process --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false --video-capture-use-gpu-memory-buffer --lang=en-GB --js-flags=--disable-optimizing-compilers --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=503 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=59498423280 --metrics-shmem-handle=11384,i,8550599732078045404,10338428630481546060,2097152 --field-trial-handle=1932,i,11014107068930983144,12855793969078739359,262144 --disable-features=OmitCorsClientCert --variations-seed-version=20260215-030006.524000-production --trace-process-track-uuid=3190709457643921541 --mojo-platform-channel-handle=10668 /prefetch:9"
+      },
+      {
+        "pid": 9068,
+        "ppid": 29740,
+        "name": "claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\Claude.exe --type=renderer --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Claude --secure-schemes=sentry-ipc --bypasscsp-schemes=sentry-ipc --cors-schemes=sentry-ipc --fetch-schemes=sentry-ipc --app-path=C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar --enable-sandbox --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=4 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=54838014648 --field-trial-handle=1900,i,4167056069299554437,8286370350784536835,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EnableTransparentHwndEnlargement,PdfUseShowSaveFilePicker --disable-features=LocalNetworkAccessChecks,NetworkServiceSandbox,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=3664 /prefetch:1"
+      },
+      {
+        "pid": 18100,
+        "ppid": 29740,
+        "name": "claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\Claude.exe --type=renderer --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Claude --secure-schemes=sentry-ipc --bypasscsp-schemes=sentry-ipc --cors-schemes=sentry-ipc --fetch-schemes=sentry-ipc --app-path=C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar --enable-sandbox --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=6 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=54838015849 --field-trial-handle=1900,i,4167056069299554437,8286370350784536835,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EnableTransparentHwndEnlargement,PdfUseShowSaveFilePicker --disable-features=LocalNetworkAccessChecks,NetworkServiceSandbox,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708991934122588 --mojo-platform-channel-handle=3568 /prefetch:1"
+      },
+      {
+        "pid": 29740,
+        "ppid": 4636,
+        "name": "claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\Claude.exe"
+      },
+      {
+        "pid": 30396,
+        "ppid": 29740,
+        "name": "claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\Claude.exe --type=renderer --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Claude --secure-schemes=sentry-ipc --bypasscsp-schemes=sentry-ipc --cors-schemes=sentry-ipc --fetch-schemes=sentry-ipc --app-path=C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar --enable-sandbox --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=7 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=54839302924 --field-trial-handle=1900,i,4167056069299554437,8286370350784536835,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EnableTransparentHwndEnlargement,PdfUseShowSaveFilePicker --disable-features=LocalNetworkAccessChecks,NetworkServiceSandbox,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708992871164437 --mojo-platform-channel-handle=4224 --desktop-features={\"nativeQuickEntry\":{\"status\":\"unavailable\"},\"quickEntryDictation\":{\"status\":\"unavailable\"},\"customQuickEntryDictationShortcut\":{\"status\":\"supported\"},\"plushRaccoon\":{\"status\":\"unavailable\"},\"quietPenguin\":{\"status\":\"unavailable\"},\"louderPenguin\":{\"status\":\"unavailable\"},\"chillingSlothFeat\":{\"status\":\"unavailable\"},\"chillingSlothLocal\":{\"status\":\"supported\"},\"yukonSilver\":{\"status\":\"supported\"},\"yukonSilverGems\":{\"status\":\"supported\"},\"desktopTopBar\":{\"status\":\"supported\"},\"ccdPlugins\":{\"status\":\"supported\"}} /prefetch:1"
+      },
+      {
+        "pid": 32172,
+        "ppid": 29740,
+        "name": "claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\Claude.exe --type=gpu-process --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Claude --gpu-preferences=SAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAAQAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAAAAAAAAABAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --field-trial-handle=1900,i,4167056069299554437,8286370350784536835,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EnableTransparentHwndEnlargement,PdfUseShowSaveFilePicker --disable-features=LocalNetworkAccessChecks,NetworkServiceSandbox,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=1896 /prefetch:2"
+      },
+      {
+        "pid": 36284,
+        "ppid": 29740,
+        "name": "claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\Claude.exe --type=crashpad-handler --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Claude /prefetch:4 --no-rate-limit --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\ivsan\\AppData\\Roaming\\Claude\\Crashpad --url=https://f.a.k/e --annotation=_productName=Claude --annotation=_version=1.1.3189 --annotation=plat=Win64 --annotation=prod=Electron --annotation=ver=40.4.1 --initial-client-data=0x4c0,0x4c4,0x4c8,0x49c,0x4cc,0x7ff7dd9fe774,0x7ff7dd9fe780,0x7ff7dd9fe790"
+      },
+      {
+        "pid": 38276,
+        "ppid": 29740,
+        "name": "claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\Claude.exe --type=utility --utility-sub-type=audio.mojom.AudioService --lang=en-US --service-sandbox-type=audio --video-capture-use-gpu-memory-buffer --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Claude --secure-schemes=sentry-ipc --bypasscsp-schemes=sentry-ipc --cors-schemes=sentry-ipc --fetch-schemes=sentry-ipc --field-trial-handle=1900,i,4167056069299554437,8286370350784536835,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EnableTransparentHwndEnlargement,PdfUseShowSaveFilePicker --disable-features=LocalNetworkAccessChecks,NetworkServiceSandbox,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708993808206286 --mojo-platform-channel-handle=4552 /prefetch:12"
+      },
+      {
+        "pid": 40528,
+        "ppid": 29740,
+        "name": "claude.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\claude.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\Claude_1.1.3189.0_x64__pzs8sxrjxfjjc\\app\\Claude.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --user-data-dir=C:\\Users\\ivsan\\AppData\\Roaming\\Claude --secure-schemes=sentry-ipc --bypasscsp-schemes=sentry-ipc --cors-schemes=sentry-ipc --fetch-schemes=sentry-ipc --field-trial-handle=1900,i,4167056069299554437,8286370350784536835,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EnableTransparentHwndEnlargement,PdfUseShowSaveFilePicker --disable-features=LocalNetworkAccessChecks,NetworkServiceSandbox,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=2164 /prefetch:11"
+      },
+      {
+        "pid": 13248,
+        "ppid": 23632,
+        "name": "cmd.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\cmd.exe",
+        "cmdline": "C:\\WINDOWS\\System32\\cmd.exe"
+      },
+      {
+        "pid": 18868,
+        "ppid": 23632,
+        "name": "cmd.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\cmd.exe",
+        "cmdline": "C:\\WINDOWS\\System32\\cmd.exe"
+      },
+      {
+        "pid": 20320,
+        "ppid": 15864,
+        "name": "cmd.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\cmd.exe",
+        "cmdline": "C:\\WINDOWS\\system32\\cmd.exe /d /s /c C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BrowserNativeMessageHost.exe chrome-extension://kagpabjoboikccfdghpdlaaopmgpgfdc/ --parent-window=0 < \\\\.\\pipe\\chrome.nativeMessaging.in.eff0c48ffcc8de84 > \\\\.\\pipe\\chrome.nativeMessaging.out.eff0c48ffcc8de84"
+      },
+      {
+        "pid": 28524,
+        "ppid": 23632,
+        "name": "cmd.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\cmd.exe",
+        "cmdline": "C:\\WINDOWS\\System32\\cmd.exe"
+      },
+      {
+        "pid": 29376,
+        "ppid": 39080,
+        "name": "cmd.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\cmd.exe",
+        "cmdline": "C:\\WINDOWS\\system32\\cmd.exe /d /s /c C:\\Program Files\\McAfee\\WebAdvisor\\BrowserHost.exe chrome-extension://fheoggkfdfchfphceeifdbepaooicaho/ --parent-window=0 < \\\\.\\pipe\\chrome.nativeMessaging.in.9fdea3baaf99026b > \\\\.\\pipe\\chrome.nativeMessaging.out.9fdea3baaf99026b"
+      },
+      {
+        "pid": 34388,
+        "ppid": 39080,
+        "name": "cmd.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\cmd.exe",
+        "cmdline": "C:\\WINDOWS\\system32\\cmd.exe /d /s /c C:\\Program Files\\WindowsApps\\Microsoft.PowerAutomateDesktop_11.2601.105.0_x64__8wekyb3d8bbwe\\dotnet\\PAD.BrowserNativeMessageHost.exe chrome-extension://ljglajjnnkapghbckkcmodicjhacbfhk/ --parent-window=0 < \\\\.\\pipe\\chrome.nativeMessaging.in.2633524a73e79973 > \\\\.\\pipe\\chrome.nativeMessaging.out.2633524a73e79973"
+      },
+      {
+        "pid": 35620,
+        "ppid": 23632,
+        "name": "cmd.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\cmd.exe",
+        "cmdline": "C:\\WINDOWS\\System32\\cmd.exe"
+      },
+      {
+        "pid": 25900,
+        "ppid": 27084,
+        "name": "cncmd.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\cncmd.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\advancedmicrodevicesinc-2.amdradeonsoftware_10.24.10035.0_x64__0a9344xs7nr4m\\radeonsoftware\\cncmd.exe watch 27084"
+      },
+      {
+        "pid": 14924,
+        "ppid": 34388,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      {
+        "pid": 14972,
+        "ppid": 13392,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      {
+        "pid": 14976,
+        "ppid": 15116,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      {
+        "pid": 17104,
+        "ppid": 20320,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      {
+        "pid": 19492,
+        "ppid": 23632,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\WINDOWS\\system32\\conhost.exe --headless --inheritcursor --width 205 --height 18 --signal 0x65c --server 0x654"
+      },
+      {
+        "pid": 20088,
+        "ppid": 23632,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\WINDOWS\\system32\\conhost.exe --headless --inheritcursor --width 205 --height 18 --signal 0x5bc --server 0x5b0"
+      },
+      {
+        "pid": 26752,
+        "ppid": 26740,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      {
+        "pid": 27044,
+        "ppid": 30428,
+        "name": "conhost.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 30260,
+        "ppid": 23632,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\WINDOWS\\system32\\conhost.exe --headless --width 80 --height 30 --signal 0x6c0 --server 0x6bc"
+      },
+      {
+        "pid": 31924,
+        "ppid": 39348,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      {
+        "pid": 38368,
+        "ppid": 23632,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\WINDOWS\\system32\\conhost.exe --headless --inheritcursor --width 205 --height 18 --signal 0x61c --server 0x614"
+      },
+      {
+        "pid": 39732,
+        "ppid": 39920,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      {
+        "pid": 40172,
+        "ppid": 29376,
+        "name": "conhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      {
+        "pid": 18860,
+        "ppid": 32496,
+        "name": "crashpad_handler.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Google\\Play Games Services\\26.2.324.0\\Service\\data\\windows.assets\\crashpad_handler.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 1172,
+        "ppid": 960,
+        "name": "csrss.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\csrss.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 9540,
+        "ppid": 15280,
+        "name": "csrss.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\csrss.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 18360,
+        "ppid": 6124,
+        "name": "ctfmon.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\System32\\ctfmon.exe",
+        "cmdline": "/QuitInfo:0000000000000348;00000000000003B4;"
+      },
+      {
+        "pid": 29636,
+        "ppid": 1764,
+        "name": "dllhost.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\SysWOW64\\dllhost.exe",
+        "cmdline": "C:\\WINDOWS\\SysWOW64\\DllHost.exe /Processid:{60A90A2F-858D-42AF-8929-82BE9D99E8A1}"
+      },
+      {
+        "pid": 25632,
+        "ppid": 33076,
+        "name": "dwm.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\dwm.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 6584,
+        "ppid": 1592,
+        "name": "emlproxy.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\emlproxy.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 4636,
+        "ppid": 28780,
+        "name": "explorer.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Windows\\explorer.exe",
+        "cmdline": "C:\\WINDOWS\\Explorer.EXE"
+      },
+      {
+        "pid": 34152,
+        "ppid": 13392,
+        "name": "fastmcp.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Users\\ivsan\\AppData\\Local\\Python\\pythoncore-3.14-64\\Scripts\\fastmcp.exe",
+        "cmdline": "fastmcp run D:\\Ivin\\Sysfore\\Azure_Foundry\\Local_MCP_Projects\\fastmcp-demo-server\\main.py"
+      },
+      {
+        "pid": 12040,
+        "ppid": 6504,
+        "name": "fcmcomm.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\FT\\fcmcomm.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 12576,
+        "ppid": 12040,
+        "name": "fcmcomm.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\FT\\fcmcomm.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 12828,
+        "ppid": 12040,
+        "name": "fcmcomm.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\FT\\fcmcomm.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 13128,
+        "ppid": 12040,
+        "name": "fcmcomm.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\Quick Heal\\Quick Heal Total Security\\FT\\fcmcomm.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 1792,
+        "ppid": 1384,
+        "name": "fontdrvhost.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\fontdrvhost.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 20664,
+        "ppid": 33076,
+        "name": "fontdrvhost.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\fontdrvhost.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 12020,
+        "ppid": 1592,
+        "name": "gamingservices.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.GamingServices_33.108.12001.0_x64__8wekyb3d8bbwe\\gamingservices.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 12028,
+        "ppid": 1592,
+        "name": "gamingservicesnet.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.GamingServices_33.108.12001.0_x64__8wekyb3d8bbwe\\gamingservicesnet.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 5288,
+        "ppid": 1592,
+        "name": "hp-one-agent-service.exe",
+        "username": null,
+        "exe": "C:\\Program Files\\HP\\HP One Agent\\hp-one-agent-service.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 1620,
+        "ppid": 1384,
+        "name": "lsass.exe",
+        "username": null,
+        "exe": "C:\\Windows\\System32\\lsass.exe",
+        "cmdline": null
+      },
+      {
+        "pid": 19348,
+        "ppid": 33396,
+        "name": "ms-teams.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\MSTeams_26015.1706.4351.4392_x64__8wekyb3d8bbwe\\ms-teams.exe",
+        "cmdline": "C:\\Program Files\\WindowsApps\\MSTeams_26015.1706.4351.4392_x64__8wekyb3d8bbwe\\ms-teams.exe --process_type=native_module --cloud_type=tfw --module_name=SlimCore --native_msg_channel=9d8caad5-25b2-416b-94d7-89c31d3d2c73_nm_SlimCore_c --session_id=c6162c85-2ce9-432b-966b-34656fbec9a8    /prefetch:1"
+      },
+      {
+        "pid": 33396,
+        "ppid": 4636,
+        "name": "ms-teams.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files\\WindowsApps\\MSTeams_26015.1706.4351.4392_x64__8wekyb3d8bbwe\\ms-teams.exe",
+        "cmdline": "C:\\Users\\ivsan\\AppData\\Local\\Microsoft\\WindowsApps\\MSTeams_8wekyb3d8bbwe\\ms-teams.exe msteams:system-initiated"
+      },
+      {
+        "pid": 5604,
+        "ppid": 15864,
+        "name": "msedge.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+        "cmdline": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=gpu-process --gpu-preferences=SAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAAQAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAAAAAAAAABAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --startup-read-main-dll --metrics-shmem-handle=2096,i,5836898135250661704,14198638695636972957,262144 --field-trial-handle=2312,i,10955568943852259752,11029209401232528362,262144 --variations-seed-version --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=2292 /prefetch:2"
+      },
+      {
+        "pid": 15864,
+        "ppid": 28988,
+        "name": "msedge.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+        "cmdline": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --no-startup-window"
+      },
+      {
+        "pid": 18388,
+        "ppid": 15864,
+        "name": "msedge.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+        "cmdline": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --instant-process --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags=--ms-user-locale=en_IN --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=10 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=52125918454 --skip-read-main-dll --metrics-shmem-handle=6308,i,1871880472595066642,13184996681764935588,2097152 --field-trial-handle=2312,i,10955568943852259752,11029209401232528362,262144 --variations-seed-version --trace-process-track-uuid=3190708995682289984 --mojo-platform-channel-handle=6296 /prefetch:1"
+      },
+      {
+        "pid": 18956,
+        "ppid": 15864,
+        "name": "msedge.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+        "cmdline": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags=--ms-user-locale=en_IN --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=13 --time-ticks-at-unix-epoch=-1771256304777380 --launch-time-ticks=52126211019 --skip-read-main-dll --metrics-shmem-handle=7036,i,14035042205347762408,6187284297186271015,2097152 --field-trial-handle=2312,i,10955568943852259752,11029209401232528362,262144 --variations-seed-version --trace-process-track-uuid=3190708998493415531 --mojo-platform-channel-handle=7384 /prefetch:1"
+      },
+      {
+        "pid": 19668,
+        "ppid": 15864,
+        "name": "msedge.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+        "cmdline": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=crashpad-handler --user-data-dir=C:\\Users\\ivsan\\AppData\\Local\\Microsoft\\Edge\\User Data /prefetch:4 --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\ivsan\\AppData\\Local\\Microsoft\\Edge\\User Data\\Crashpad --annotation=IsOfficialBuild=1 --annotation=channel= --annotation=chromium-version=145.0.7632.76 --annotation=exe=C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --annotation=plat=Win64 --annotation=prod=Edge --annotation=ver=145.0.3800.58 --initial-client-data=0x274,0x278,0x27c,0x270,0x244,0x7ffa57390f18,0x7ffa57390f24,0x7ffa57390f30"
+      },
+      {
+        "pid": 21324,
+        "ppid": 15864,
+        "name": "msedge.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+        "cmdline": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=service --startup-read-main-dll --metrics-shmem-handle=2872,i,9259912326081559229,14591430891408690490,524288 --field-trial-handle=2312,i,10955568943852259752,11029209401232528362,262144 --variations-seed-version --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=2880 /prefetch:13"
+      },
+      {
+        "pid": 26124,
+        "ppid": 15864,
+        "name": "msedge.exe",
+        "username": "IVINCHRIS\\ivsan",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+        "cmdline": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --startup-read-main-dll --metrics-shmem-handle=2652,i,4402185757728435248,11782392094739822704,524288 --field-trial-handle=2312,i,10955568943852259752,11029209401232528362,262144 --variations-seed-version --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=2428 /prefetch:11"
+      }
+    ],
+    "eventlogs": {
+      "minutes": 30,
+      "sources": {
+        "Security": "powershell",
+        "System": "wevtutil",
+        "Application": "powershell",
+        "Microsoft-Windows-Windows Defender/Operational": "powershell",
+        "Microsoft-Windows-WindowsUpdateClient/Operational": "powershell"
+      },
+      "events": {
+        "Security": [
+          {
+            "error": "powershell Get-WinEvent failed for Security",
+            "stderr": "Get-WinEvent : No events were found that match the specified selection criteria.\nAt line:4 char:7\n+       Get-WinEvent -FilterHashtable @{LogName='Security'; StartTime=$ ...\n+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (:) [Get-WinEvent], Exception\n    + FullyQualifiedErrorId : NoMatchingEventsFound,Microsoft.PowerShell.Commands.GetWinEventCommand"
+          }
+        ],
+        "System": [
+          {
+            "log": "System",
+            "event_id": 16,
+            "event_name": null,
+            "provider": "System",
+            "time_raw": "2026-02-17T13:56:53.7540000Z",
+            "message_tail": "Event[0]\n  Log Name: System\n  Source: Microsoft-Windows-Kernel-General\n  Date: 2026-02-17T13:56:53.7540000Z\n  Event ID: 16\n  Task: N/A\n  Level: Information\u0000\n  Opcode: Info\u0000\u0000\n  Keyword: N/A\n  User: S-1-5-18\n  User Name: NT AUTHORITY\\SYSTEM\n  Computer: IVINCHRIS\n  Description: \nThe access history in hive \\??\\C:\\Users\\ivsan\\AppData\\Local\\Packages\\Microsoft.ScreenSketch_8wekyb3d8bbwe\\SystemAppData\\Helium\\User.dat was cleared updating 11 keys and creating 1 modified pages.\u0000"
+          },
+          {
+            "log": "System",
+            "event_id": 16,
+            "event_name": null,
+            "provider": "System",
+            "time_raw": "2026-02-17T13:56:53.7560000Z",
+            "message_tail": "Event[1]\n  Log Name: System\n  Source: Microsoft-Windows-Kernel-General\n  Date: 2026-02-17T13:56:53.7560000Z\n  Event ID: 16\n  Task: N/A\n  Level: Information\u0000\n  Opcode: Info\u0000\u0000\n  Keyword: N/A\n  User: S-1-5-18\n  User Name: NT AUTHORITY\\SYSTEM\n  Computer: IVINCHRIS\n  Description: \nThe access history in hive \\??\\C:\\Users\\ivsan\\AppData\\Local\\Packages\\Microsoft.ScreenSketch_8wekyb3d8bbwe\\SystemAppData\\Helium\\UserClasses.dat was cleared updating 31 keys and creating 5 modified pages.\u0000"
+          },
+          {
+            "log": "System",
+            "event_id": 16,
+            "event_name": null,
+            "provider": "System",
+            "time_raw": "2026-02-17T13:56:53.8350000Z",
+            "message_tail": "Event[2]\n  Log Name: System\n  Source: Microsoft-Windows-Kernel-General\n  Date: 2026-02-17T13:56:53.8350000Z\n  Event ID: 16\n  Task: N/A\n  Level: Information\u0000\n  Opcode: Info\u0000\u0000\n  Keyword: N/A\n  User: S-1-5-18\n  User Name: NT AUTHORITY\\SYSTEM\n  Computer: IVINCHRIS\n  Description: \nThe access history in hive \\??\\C:\\Users\\ivsan\\AppData\\Local\\Packages\\Microsoft.ScreenSketch_8wekyb3d8bbwe\\Settings\\settings.dat was cleared updating 2 keys and creating 1 modified pages.\u0000"
+          }
+        ],
+        "Application": [
+          {
+            "error": "powershell Get-WinEvent failed for Application",
+            "stderr": "Get-WinEvent : No events were found that match the specified selection criteria.\nAt line:4 char:7\n+       Get-WinEvent -FilterHashtable @{LogName='Application'; StartTim ...\n+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (:) [Get-WinEvent], Exception\n    + FullyQualifiedErrorId : NoMatchingEventsFound,Microsoft.PowerShell.Commands.GetWinEventCommand"
+          }
+        ],
+        "Microsoft-Windows-Windows Defender/Operational": [
+          {
+            "error": "powershell Get-WinEvent failed for Microsoft-Windows-Windows Defender/Operational",
+            "stderr": "Get-WinEvent : No events were found that match the specified selection criteria.\nAt line:4 char:7\n+       Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Wind ...\n+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (:) [Get-WinEvent], Exception\n    + FullyQualifiedErrorId : NoMatchingEventsFound,Microsoft.PowerShell.Commands.GetWinEventCommand"
+          }
+        ],
+        "Microsoft-Windows-WindowsUpdateClient/Operational": [
+          {
+            "error": "powershell Get-WinEvent failed for Microsoft-Windows-WindowsUpdateClient/Operational",
+            "stderr": "Get-WinEvent : No events were found that match the specified selection criteria.\nAt line:4 char:7\n+       Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Wind ...\n+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (:) [Get-WinEvent], Exception\n    + FullyQualifiedErrorId : NoMatchingEventsFound,Microsoft.PowerShell.Commands.GetWinEventCommand"
+          }
+        ]
+      }
+    },
+    "defender_status": {
+      "available": true,
+      "data": {
+        "AMServiceEnabled": false,
+        "AntispywareEnabled": false,
+        "AntivirusEnabled": false,
+        "RealTimeProtectionEnabled": false,
+        "NISEnabled": false,
+        "QuickScanAge": 4294967295,
+        "FullScanAge": 4294967295,
+        "SignatureAge": 65535,
+        "ExclusionCount": 0
+      }
+    }
+  },
+  "alerts": [
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:135",
+      "port": {
+        "pid": 1904,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 135
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:445",
+      "port": {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "0.0.0.0",
+        "local_port": 445
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:5040",
+      "port": {
+        "pid": 15104,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 5040
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:7070",
+      "port": {
+        "pid": 6524,
+        "process": "AnyDesk.exe",
+        "exe": "C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 7070
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:9095",
+      "port": {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "0.0.0.0",
+        "local_port": 9095
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:49664",
+      "port": {
+        "pid": 1620,
+        "process": "lsass.exe",
+        "exe": "C:\\Windows\\System32\\lsass.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49664
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:49665",
+      "port": {
+        "pid": 1384,
+        "process": "wininit.exe",
+        "exe": "C:\\Windows\\System32\\wininit.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49665
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:49666",
+      "port": {
+        "pid": 2240,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49666
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:49667",
+      "port": {
+        "pid": 3612,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49667
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:49668",
+      "port": {
+        "pid": 6240,
+        "process": "spoolsv.exe",
+        "exe": "C:\\Windows\\System32\\spoolsv.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49668
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: 0.0.0.0:49735",
+      "port": {
+        "pid": 1592,
+        "process": "services.exe",
+        "exe": "C:\\Windows\\System32\\services.exe",
+        "username": null,
+        "local_ip": "0.0.0.0",
+        "local_port": 49735
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::135",
+      "port": {
+        "pid": 1904,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 135
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::445",
+      "port": {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "::",
+        "local_port": 445
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::7070",
+      "port": {
+        "pid": 6524,
+        "process": "AnyDesk.exe",
+        "exe": "C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 7070
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::9095",
+      "port": {
+        "pid": 4,
+        "process": "System",
+        "exe": "",
+        "username": "NT AUTHORITY\\SYSTEM",
+        "local_ip": "::",
+        "local_port": 9095
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::49664",
+      "port": {
+        "pid": 1620,
+        "process": "lsass.exe",
+        "exe": "C:\\Windows\\System32\\lsass.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49664
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::49665",
+      "port": {
+        "pid": 1384,
+        "process": "wininit.exe",
+        "exe": "C:\\Windows\\System32\\wininit.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49665
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::49666",
+      "port": {
+        "pid": 2240,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49666
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::49667",
+      "port": {
+        "pid": 3612,
+        "process": "svchost.exe",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49667
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::49668",
+      "port": {
+        "pid": 6240,
+        "process": "spoolsv.exe",
+        "exe": "C:\\Windows\\System32\\spoolsv.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49668
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    },
+    {
+      "type": "exposed_listening_port",
+      "severity": "medium",
+      "reason": "Port bound to all interfaces: :::49735",
+      "port": {
+        "pid": 1592,
+        "process": "services.exe",
+        "exe": "C:\\Windows\\System32\\services.exe",
+        "username": null,
+        "local_ip": "::",
+        "local_port": 49735
+      },
+      "mitre": [
+        {
+          "technique_id": "T1021",
+          "name": "Remote Services"
+        }
+      ]
+    }
+  ],
+  "soc_assessment": {
+    "alert_count": 21,
+    "max_severity": "medium",
+    "max_severity_score": 50,
+    "confidence": "medium",
+    "note": "Heuristic detection. Use Sysmon for higher fidelity evidence."
+  },
+  "recommended_actions": [
+    "If suspicious connections exist, block remote IPs using fw_block_ip().",
+    "If brute force suspected, review logon sources and enforce stronger auth.",
+    "If service installs detected, verify the service binary path and publisher.",
+    "Run defender_update() then defender_scan_quick().",
+    "If critical, apply containment via fw_lockdown_mode().",
+    "Deploy Sysmon for higher-fidelity telemetry and better detection coverage."
+  ],
+  "standards": {
+    "mitre_attack": true,
+    "nist_style": true,
+    "soc_reporting": true
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "updated_utc": "2026-02-17T01:53:17.750263+00:00",
+  "tools": [
+    {
+      "name": "custom_dsl_tool_create"
+    },
+    {
+      "name": "custom_dsl_tool_delete"
+    },
+    {
+      "name": "custom_dsl_tool_run"
+    },
+    {
+      "name": "custom_python_tool_create"
+    },
+    {
+      "name": "custom_python_tool_delete"
+    },
+    {
+      "name": "custom_python_tool_run"
+    },
+    {
+      "name": "defender_get_status"
+    },
+    {
+      "name": "defender_scan_full"
+    },
+    {
+      "name": "defender_scan_quick"
+    },
+    {
+      "name": "defender_update"
+    },
+    {
+      "name": "export_last_soc_report"
+    },
+    {
+      "name": "fw_block_ip"
+    },
+    {
+      "name": "fw_lockdown_mode"
+    },
+    {
+      "name": "generate_executive_report"
+    },
+    {
+      "name": "get_recent_eventlogs"
+    },
+    {
+      "name": "list_external_connections"
+    },
+    {
+      "name": "list_listening_ports"
+    },
+    {
+      "name": "list_process_inventory"
+    },
+    {
+      "name": "list_recordings"
+    },
+    {
+      "name": "read_session_snapshots"
+    },
+    {
+      "name": "security_triage_snapshot"
+    },
+    {
+      "name": "soar_audit_log_tail"
+    },
+    {
+      "name": "soar_orchestrate"
+    },
+    {
+      "name": "start_recording"
+    },
+    {
+      "name": "stop_recording"
+    },
+    {
+      "name": "tool_registry_list"
+    },
+    {
+      "name": "tool_registry_sync"
+    }
+  ]
+}

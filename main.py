@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import json
+import io
 import os
-import re
+import re, requests
 import subprocess
 import threading
 import time
@@ -15,6 +16,11 @@ from typing import Any, Dict, List, Optional, Tuple, Literal, Callable, Union
 
 import psutil
 from fastmcp import FastMCP
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+from fpdf import FPDF
 
 # ============================================================
 # MCP Server
@@ -1701,6 +1707,483 @@ def generate_executive_report(session_id: str) -> Dict[str, Any]:
             ),
             "error": asdict(ErrorInfo(error_type=type(e).__name__, error_message=str(e))),
         }
+
+def generate_soc_report(
+    report_title: str,
+    soc_snapshot: dict,
+    org_name: str = "Internal SOC",
+    analyst_name: str = "MCP Auto-Analyst",
+    upload_provider: str = "tmpfiles",
+) -> str:
+    """
+    Generates a SOC-grade PDF report with real charts + visualizations
+    (NO system health telemetry). Uploads it and returns a download link.
+
+    Expected soc_snapshot keys (best effort):
+      - metadata: {host, user, os, timestamp_utc, session_id}
+      - findings: [{id, title, severity, confidence, category, mitre, evidence}]
+      - network: {suspicious_connections: [...], dns_queries: [...], iocs: [...]}
+      - processes: {suspicious_processes: [...], unsigned_binaries: [...]}
+      - persistence: {autoruns: [...], scheduled_tasks: [...], services: [...]}
+      - event_logs: {security: [...], system: [...], application: [...]}
+      - actions: {recommended: [...], executed: [...], blocked: [...]}
+      - scores: {risk_score_0_100, confidence_0_100}
+    """
+    try:
+        
+
+        # ----------------------------
+        # Helpers
+        # ----------------------------
+        def _now_utc_str() -> str:
+            return datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+
+        def _safe_str(v) -> str:
+            if v is None:
+                return ""
+            try:
+                s = str(v)
+            except Exception:
+                s = repr(v)
+            return s.encode("latin-1", "replace").decode("latin-1")
+
+        def _get(d: dict, path: str, default=None):
+            cur = d
+            for part in path.split("."):
+                if not isinstance(cur, dict) or part not in cur:
+                    return default
+                cur = cur[part]
+            return cur
+
+        def _clamp(x: float, lo: float, hi: float) -> float:
+            return max(lo, min(hi, x))
+
+        def _mk_tmp_png(fig) -> bytes:
+            bio = io.BytesIO()
+            fig.savefig(bio, format="png", dpi=180, bbox_inches="tight")
+            plt.close(fig)
+            bio.seek(0)
+            return bio.read()
+
+        def _save_png_bytes_to_file(png_bytes: bytes, filename: str) -> str:
+            # Writes to local disk so FPDF can embed it
+            with open(filename, "wb") as f:
+                f.write(png_bytes)
+            return filename
+
+        def _severity_to_int(sev: str) -> int:
+            s = (sev or "").strip().lower()
+            if s in ("critical", "sev1", "p1"):
+                return 4
+            if s in ("high", "sev2", "p2"):
+                return 3
+            if s in ("medium", "sev3", "p3"):
+                return 2
+            if s in ("low", "sev4", "p4"):
+                return 1
+            return 0
+
+        def _severity_label(n: int) -> str:
+            return {4: "CRITICAL", 3: "HIGH", 2: "MEDIUM", 1: "LOW", 0: "INFO"}.get(n, "INFO")
+
+        # ----------------------------
+        # Normalize inputs
+        # ----------------------------
+        meta = soc_snapshot.get("metadata", {}) if isinstance(soc_snapshot, dict) else {}
+        findings = soc_snapshot.get("findings", []) if isinstance(soc_snapshot, dict) else []
+
+        scores = soc_snapshot.get("scores", {}) if isinstance(soc_snapshot, dict) else {}
+        risk_score = float(scores.get("risk_score_0_100", 0.0) or 0.0)
+        confidence_score = float(scores.get("confidence_0_100", 0.0) or 0.0)
+
+        risk_score = _clamp(risk_score, 0.0, 100.0)
+        confidence_score = _clamp(confidence_score, 0.0, 100.0)
+
+        session_id = _safe_str(_get(meta, "session_id", str(uuid.uuid4())))
+        host = _safe_str(_get(meta, "host", "Unknown Host"))
+        user = _safe_str(_get(meta, "user", "Unknown User"))
+        os_name = _safe_str(_get(meta, "os", "Unknown OS"))
+        ts_utc = _safe_str(_get(meta, "timestamp_utc", _now_utc_str()))
+
+        # ----------------------------
+        # Extract counts for charts
+        # ----------------------------
+        sev_counts = {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0, "INFO": 0}
+        cat_counts = {}
+        mitre_counts = {}
+
+        for f in findings:
+            if not isinstance(f, dict):
+                continue
+            sev = _safe_str(f.get("severity", "INFO")).upper()
+            if sev not in sev_counts:
+                sev = "INFO"
+            sev_counts[sev] += 1
+
+            cat = _safe_str(f.get("category", "unknown")).strip().lower()
+            cat_counts[cat] = cat_counts.get(cat, 0) + 1
+
+            mitre = f.get("mitre", None)
+            # mitre can be str or list
+            if isinstance(mitre, str) and mitre.strip():
+                mitre_counts[mitre.strip()] = mitre_counts.get(mitre.strip(), 0) + 1
+            elif isinstance(mitre, list):
+                for m in mitre:
+                    if isinstance(m, str) and m.strip():
+                        mitre_counts[m.strip()] = mitre_counts.get(m.strip(), 0) + 1
+
+        total_findings = sum(sev_counts.values())
+
+        # ----------------------------
+        # Create charts (PNG bytes)
+        # ----------------------------
+        # 1) Severity distribution (bar)
+        fig1 = plt.figure(figsize=(6.8, 3.4))
+        ax1 = fig1.add_subplot(111)
+        labels1 = ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"]
+        vals1 = [sev_counts[l] for l in labels1]
+        ax1.bar(labels1, vals1)
+        ax1.set_title("Findings by Severity")
+        ax1.set_ylabel("Count")
+        ax1.grid(True, axis="y", alpha=0.3)
+        severity_png = _mk_tmp_png(fig1)
+
+        # 2) Category distribution (pie)
+        fig2 = plt.figure(figsize=(6.8, 3.4))
+        ax2 = fig2.add_subplot(111)
+        cat_items = sorted(cat_counts.items(), key=lambda x: x[1], reverse=True)[:8]
+        if cat_items:
+            labels2 = [k for k, _ in cat_items]
+            vals2 = [v for _, v in cat_items]
+            ax2.pie(vals2, labels=labels2, autopct="%1.0f%%", startangle=90)
+            ax2.set_title("Top Finding Categories (Top 8)")
+        else:
+            ax2.text(0.5, 0.5, "No category data available", ha="center", va="center")
+            ax2.set_axis_off()
+        category_png = _mk_tmp_png(fig2)
+
+        # 3) MITRE techniques distribution (horizontal bar)
+        fig3 = plt.figure(figsize=(6.8, 3.8))
+        ax3 = fig3.add_subplot(111)
+        mitre_items = sorted(mitre_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+        if mitre_items:
+            y_labels = [k for k, _ in mitre_items][::-1]
+            x_vals = [v for _, v in mitre_items][::-1]
+            ax3.barh(y_labels, x_vals)
+            ax3.set_title("MITRE ATT&CK Coverage (Top 10)")
+            ax3.set_xlabel("Count")
+            ax3.grid(True, axis="x", alpha=0.3)
+        else:
+            ax3.text(0.5, 0.5, "No MITRE mapping available", ha="center", va="center")
+            ax3.set_axis_off()
+        mitre_png = _mk_tmp_png(fig3)
+
+        # 4) Risk gauge (simple donut)
+        fig4 = plt.figure(figsize=(4.2, 4.2))
+        ax4 = fig4.add_subplot(111)
+        ax4.set_title("Overall Risk Score (0-100)")
+        risk_val = risk_score
+        ax4.pie(
+            [risk_val, 100.0 - risk_val],
+            startangle=90,
+            wedgeprops=dict(width=0.35),
+            labels=["Risk", ""],
+            autopct=lambda p: f"{risk_val:.0f}" if p > 50 else "",
+        )
+        risk_png = _mk_tmp_png(fig4)
+
+        # 5) Confidence gauge
+        fig5 = plt.figure(figsize=(4.2, 4.2))
+        ax5 = fig5.add_subplot(111)
+        ax5.set_title("Confidence Score (0-100)")
+        conf_val = confidence_score
+        ax5.pie(
+            [conf_val, 100.0 - conf_val],
+            startangle=90,
+            wedgeprops=dict(width=0.35),
+            labels=["Confidence", ""],
+            autopct=lambda p: f"{conf_val:.0f}" if p > 50 else "",
+        )
+        confidence_png = _mk_tmp_png(fig5)
+
+        # Save to temp files (FPDF needs file paths)
+        # NOTE: Keep filenames unique per session
+        severity_file = _save_png_bytes_to_file(severity_png, f"soc_severity_{session_id}.png")
+        category_file = _save_png_bytes_to_file(category_png, f"soc_category_{session_id}.png")
+        mitre_file = _save_png_bytes_to_file(mitre_png, f"soc_mitre_{session_id}.png")
+        risk_file = _save_png_bytes_to_file(risk_png, f"soc_risk_{session_id}.png")
+        confidence_file = _save_png_bytes_to_file(confidence_png, f"soc_confidence_{session_id}.png")
+
+        # ----------------------------
+        # SOC Verdict Logic
+        # ----------------------------
+        # Weighted: risk_score + critical/high presence
+        critical_n = sev_counts["CRITICAL"]
+        high_n = sev_counts["HIGH"]
+
+        if risk_score >= 80 or critical_n >= 1:
+            verdict = "CRITICAL INCIDENT LIKELY"
+            verdict_label = "CRITICAL"
+        elif risk_score >= 60 or high_n >= 2:
+            verdict = "HIGH RISK ACTIVITY DETECTED"
+            verdict_label = "HIGH"
+        elif risk_score >= 35:
+            verdict = "SUSPICIOUS ACTIVITY (REVIEW REQUIRED)"
+            verdict_label = "MEDIUM"
+        else:
+            verdict = "NO STRONG MALICIOUS SIGNALS FOUND"
+            verdict_label = "LOW"
+
+        # ----------------------------
+        # Build PDF
+        # ----------------------------
+        pdf = FPDF(orientation="P", unit="mm", format="A4")
+        pdf.set_auto_page_break(auto=True, margin=15)
+
+        # TITLE PAGE
+        pdf.add_page()
+        pdf.set_font("helvetica", "B", 22)
+        pdf.cell(0, 10, _safe_str(report_title), ln=True, align="C")
+        pdf.ln(2)
+
+        pdf.set_font("helvetica", "", 11)
+        pdf.cell(0, 6, f"Organization: {_safe_str(org_name)}", ln=True)
+        pdf.cell(0, 6, f"Analyst: {_safe_str(analyst_name)}", ln=True)
+        pdf.cell(0, 6, f"Generated: {_safe_str(_now_utc_str())}", ln=True)
+        pdf.cell(0, 6, f"Session ID: {_safe_str(session_id)}", ln=True)
+        pdf.ln(4)
+
+        pdf.set_font("helvetica", "B", 12)
+        pdf.cell(0, 7, "Target Endpoint", ln=True)
+        pdf.set_font("helvetica", "", 11)
+        pdf.cell(0, 6, f"Host: {host}", ln=True)
+        pdf.cell(0, 6, f"User: {user}", ln=True)
+        pdf.cell(0, 6, f"OS: {os_name}", ln=True)
+        pdf.cell(0, 6, f"Snapshot Timestamp: {ts_utc}", ln=True)
+
+        pdf.ln(6)
+        pdf.set_font("helvetica", "B", 13)
+        pdf.cell(0, 8, f"Verdict: {verdict}", ln=True)
+        pdf.set_font("helvetica", "", 11)
+        pdf.multi_cell(
+            0, 6,
+            _safe_str(
+                f"This report summarizes endpoint security evidence collected by the MCP server tools. "
+                f"It is based on system-level artifacts (process, network, persistence, logs) and does not "
+                f"include system health telemetry (CPU/RAM/fan)."
+            )
+        )
+
+        # PAGE: SCORE VISUALS
+        pdf.add_page()
+        pdf.set_font("helvetica", "B", 14)
+        pdf.cell(0, 8, "Section 1 — Risk & Confidence", ln=True)
+        pdf.ln(2)
+
+        # Place two donuts side-by-side
+        pdf.image(risk_file, x=20, y=35, w=80)
+        pdf.image(confidence_file, x=110, y=35, w=80)
+
+        pdf.ln(95)
+        pdf.set_font("helvetica", "", 11)
+        pdf.multi_cell(
+            0, 6,
+            _safe_str(
+                f"Risk Score: {risk_score:.1f}/100\n"
+                f"Confidence Score: {confidence_score:.1f}/100\n\n"
+                f"Total Findings: {total_findings}\n"
+                f"Critical: {sev_counts['CRITICAL']}, High: {sev_counts['HIGH']}, "
+                f"Medium: {sev_counts['MEDIUM']}, Low: {sev_counts['LOW']}, Info: {sev_counts['INFO']}"
+            )
+        )
+
+        # PAGE: SEVERITY + CATEGORY
+        pdf.add_page()
+        pdf.set_font("helvetica", "B", 14)
+        pdf.cell(0, 8, "Section 2 — Findings Distribution", ln=True)
+        pdf.ln(2)
+
+        pdf.image(severity_file, x=15, w=180)
+        pdf.ln(4)
+        pdf.image(category_file, x=15, w=180)
+
+        # PAGE: MITRE
+        pdf.add_page()
+        pdf.set_font("helvetica", "B", 14)
+        pdf.cell(0, 8, "Section 3 — MITRE ATT&CK Mapping", ln=True)
+        pdf.ln(2)
+        pdf.image(mitre_file, x=15, w=180)
+
+        pdf.ln(4)
+        pdf.set_font("helvetica", "", 10)
+        pdf.multi_cell(
+            0, 5,
+            _safe_str(
+                "MITRE mapping is derived from observed behaviors (e.g., persistence, suspicious network, "
+                "process injection patterns). This mapping improves incident triage and enables SOC playbook alignment."
+            )
+        )
+
+        # PAGE: TOP FINDINGS
+        pdf.add_page()
+        pdf.set_font("helvetica", "B", 14)
+        pdf.cell(0, 8, "Section 4 — Key Findings (Evidence Summary)", ln=True)
+        pdf.ln(2)
+
+        if not findings:
+            pdf.set_font("helvetica", "", 11)
+            pdf.multi_cell(0, 6, "No findings were provided in the snapshot.")
+        else:
+            # Sort by severity
+            def _sort_key(f):
+                return _severity_to_int(f.get("severity", ""))
+
+            top = sorted([f for f in findings if isinstance(f, dict)], key=_sort_key, reverse=True)[:15]
+            for idx, f in enumerate(top, start=1):
+                title = _safe_str(f.get("title", f"Finding #{idx}"))
+                sev = _safe_str(f.get("severity", "INFO")).upper()
+                conf = f.get("confidence", None)
+                cat = _safe_str(f.get("category", "unknown"))
+                mitre = f.get("mitre", None)
+
+                pdf.set_font("helvetica", "B", 11)
+                pdf.multi_cell(0, 6, f"{idx}. [{sev}] {title}")
+
+                pdf.set_font("helvetica", "", 10)
+                if conf is not None:
+                    pdf.cell(0, 5, f"Confidence: {_safe_str(conf)}", ln=True)
+                pdf.cell(0, 5, f"Category: {cat}", ln=True)
+
+                if mitre:
+                    pdf.multi_cell(0, 5, f"MITRE: {_safe_str(mitre)}")
+
+                evidence = f.get("evidence", None)
+                if evidence:
+                    # show short evidence snippet
+                    ev_text = _safe_str(json.dumps(evidence, indent=2)[:900])
+                    pdf.set_font("courier", "", 8)
+                    pdf.multi_cell(0, 4, ev_text)
+
+                pdf.ln(2)
+
+        # PAGE: RECOMMENDATIONS
+        pdf.add_page()
+        pdf.set_font("helvetica", "B", 14)
+        pdf.cell(0, 8, "Section 5 — Recommended Response Actions", ln=True)
+        pdf.ln(2)
+
+        actions = soc_snapshot.get("actions", {}) if isinstance(soc_snapshot, dict) else {}
+        recommended = actions.get("recommended", []) if isinstance(actions, dict) else []
+        executed = actions.get("executed", []) if isinstance(actions, dict) else []
+        blocked = actions.get("blocked", []) if isinstance(actions, dict) else []
+
+        pdf.set_font("helvetica", "B", 12)
+        pdf.cell(0, 7, "Recommended:", ln=True)
+        pdf.set_font("helvetica", "", 11)
+
+        if recommended:
+            for a in recommended[:20]:
+                pdf.multi_cell(0, 6, f"- {_safe_str(a)}")
+        else:
+            # Auto-generate based on verdict
+            defaults = []
+            if verdict_label in ("CRITICAL", "HIGH"):
+                defaults = [
+                    "Isolate the endpoint from the network (if possible).",
+                    "Preserve evidence (logs, process tree, network connections).",
+                    "Block suspicious domains/IPs at firewall/proxy.",
+                    "Disable suspicious persistence entries.",
+                    "Run deep malware scan and validate system integrity.",
+                    "Escalate to Incident Response team."
+                ]
+            elif verdict_label == "MEDIUM":
+                defaults = [
+                    "Perform manual review of suspicious processes and persistence.",
+                    "Verify unsigned binaries and unknown executables.",
+                    "Check outbound connections and DNS anomalies.",
+                    "Monitor endpoint for recurrence."
+                ]
+            else:
+                defaults = [
+                    "No urgent action required.",
+                    "Continue monitoring for changes.",
+                    "Ensure security baselines and patching are applied."
+                ]
+            for a in defaults:
+                pdf.multi_cell(0, 6, f"- {a}")
+
+        pdf.ln(4)
+        pdf.set_font("helvetica", "B", 12)
+        pdf.cell(0, 7, "Executed (if any):", ln=True)
+        pdf.set_font("helvetica", "", 11)
+        if executed:
+            for a in executed[:20]:
+                pdf.multi_cell(0, 6, f"- {_safe_str(a)}")
+        else:
+            pdf.multi_cell(0, 6, "- None")
+
+        pdf.ln(2)
+        pdf.set_font("helvetica", "B", 12)
+        pdf.cell(0, 7, "Blocked/Prevented:", ln=True)
+        pdf.set_font("helvetica", "", 11)
+        if blocked:
+            for a in blocked[:20]:
+                pdf.multi_cell(0, 6, f"- {_safe_str(a)}")
+        else:
+            pdf.multi_cell(0, 6, "- None")
+
+        # FINAL PAGE: RAW SNAPSHOT (TRUNCATED)
+        pdf.add_page()
+        pdf.set_font("helvetica", "B", 14)
+        pdf.cell(0, 8, "Appendix — Raw Snapshot (Truncated)", ln=True)
+        pdf.ln(2)
+        pdf.set_font("courier", "", 8)
+        raw = _safe_str(json.dumps(soc_snapshot, indent=2)[:4500])
+        pdf.multi_cell(0, 4, raw)
+
+        # ----------------------------
+        # Export PDF bytes
+        # ----------------------------
+        pdf_bytes = pdf.output(dest="S").encode("latin-1", "replace")
+
+        # ----------------------------
+        # Upload PDF
+        # ----------------------------
+        # tmpfiles supports multipart upload
+        filename = f"soc_report_{session_id}.pdf"
+
+        if upload_provider.lower() == "tmpfiles":
+            url = "https://tmpfiles.org/api/v1/upload"
+            files = {"file": (filename, pdf_bytes, "application/pdf")}
+            resp = requests.post(url, files=files, timeout=15)
+
+            if resp.status_code == 200:
+                data = resp.json()
+                raw_url = data["data"]["url"]
+                direct_url = raw_url.replace("https://tmpfiles.org/", "https://tmpfiles.org/dl/")
+
+                return (
+                    "✅ **SOC Report Generated Successfully**\n\n"
+                    f"📄 Title: {report_title}\n"
+                    f"🧾 Session ID: {session_id}\n"
+                    f"🖥 Host: {host}\n"
+                    f"⚠️ Verdict: {verdict}\n"
+                    f"📊 Risk: {risk_score:.1f}/100 | Confidence: {confidence_score:.1f}/100\n"
+                    f"🔎 Findings: {total_findings}\n\n"
+                    f"🔗 Download Link: {raw_url}\n"
+                    f"🔗 Direct Download: {direct_url}\n\n"
+                    "Includes: Severity distribution, category pie chart, MITRE mapping chart, "
+                    "risk/confidence gauges, evidence summaries, and response recommendations."
+                )
+            else:
+                return f"❌ Upload failed: HTTP {resp.status_code} | {resp.text[:400]}"
+
+        return "❌ Unsupported upload_provider. Use upload_provider='tmpfiles'."
+
+    except Exception as e:
+        import traceback
+        return f"System Error: {str(e)}\n{traceback.format_exc()}"
+
 
 
 # ============================================================
